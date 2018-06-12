@@ -6,16 +6,26 @@ using System;
 public class SwipeTrail : MonoBehaviour {
     
     private Vector3[] rayPositions;
+    private bool touchedAlready;
+    private TrailRenderer trailRenderer;
+    public bool retraceLine;
+    public int rayPositionCounter = 1;
+    private bool firstTouch = true;
 
-    private bool touchedAlready = false;
+    // Use this for initialization
+    void Awake () {
+        trailRenderer = GetComponent<TrailRenderer>();
 
-	// Use this for initialization
-	void Start () {
-		
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {
+        if(trailRenderer.positionCount > 0 && firstTouch)
+        {
+            clearTrail();
+            firstTouch = false;
+        }
+        // Check, if the screen is touched and if the finger / mouse is moving
 		if((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved) || Input.GetMouseButton(0))
         {
             if (touchedAlready == false) touchedAlready = true;
@@ -24,27 +34,63 @@ public class SwipeTrail : MonoBehaviour {
             float rayDistance;
             if(objPlane.Raycast(mRay, out rayDistance))
             {
-                this.transform.position = mRay.GetPoint(rayDistance);
-                
+                transform.position = mRay.GetPoint(rayDistance);
             }
         }
+
+
+
+        // Check, if the user has released the screen to store the last drawn line
         if (!Input.GetMouseButton(0) && touchedAlready)
         {
             Debug.Log("Lifted");
             storeRay();
-            
             touchedAlready = false;
         }
+
+        if (retraceLine)
+        {
+            if (rayPositionCounter == 1)
+            {
+                transform.position = rayPositions[1];
+                rayPositionCounter++;
+                return;
+            }
+            if(rayPositionCounter == 2)
+            {
+                clearTrail();
+            }
+                transform.position = rayPositions[rayPositionCounter];
+                Debug.Log("Moved to: " + rayPositions[rayPositionCounter] + " at position " + rayPositionCounter);
+            rayPositionCounter++;
+            if (rayPositionCounter == rayPositions.Length)
+            {
+                retraceLine = false;
+            }
+            
+        }
+
     }
 
     void storeRay()
     {
-        int arrayLength = GetComponent<TrailRenderer>().positionCount;
+        int arrayLength = trailRenderer.positionCount;
         rayPositions = new Vector3[arrayLength];
         GetComponent<TrailRenderer>().GetPositions(rayPositions);
         for (int i = 0; i < rayPositions.Length; i++)
         {
-            Debug.Log(rayPositions[i]);
+            //Debug.Log(rayPositions[i]);
         }
+        trailRenderer.Clear();
+       
     }
+
+    public void clearTrail()
+    {
+        trailRenderer.Clear();
+        Debug.Log("Trail cleared");
+    }
+
+
+  
 }
