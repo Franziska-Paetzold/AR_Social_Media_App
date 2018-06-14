@@ -4,7 +4,8 @@ using UnityEngine;
 using System;
 
 public class SwipeTrail : MonoBehaviour {
-    
+
+    public Material TrailMaterial;
     private Vector3[] rayPositions;
     private bool touchedAlready;
     private TrailRenderer trailRenderer;
@@ -15,10 +16,10 @@ public class SwipeTrail : MonoBehaviour {
     // Use this for initialization
     void Awake () {
         trailRenderer = GetComponent<TrailRenderer>();
-
+        setTrailColour(Color.green, trailRenderer);
     }
 	
-	// Update is called once per frame
+
 	void Update () {
         if(trailRenderer.positionCount > 0 && firstTouch)
         {
@@ -94,9 +95,35 @@ public class SwipeTrail : MonoBehaviour {
 
     public void RetraceLine()
     {
-   
         LineRenderer lineRenderer = gameObject.AddComponent<LineRenderer>();
+
+        // Set the width of the Line Renderer
+        lineRenderer.SetWidth(0.1F, 0.1F);
+        // Set the number of vertex fo the Line Renderer
+        lineRenderer.SetVertexCount(rayPositions.Length);
+        lineRenderer.material = TrailMaterial;
+        setTrailColour(Color.green, null, lineRenderer);
         lineRenderer.SetPositions(rayPositions);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="color"></param>
+    /// <param name="tRenderer">Optional. Changes the colour of the passed trail renderer</param>
+    /// <param name="lRenderer">Optional. Changes the colour of the passed line renderer</param>
+    public void setTrailColour(Color color, TrailRenderer tRenderer = null, LineRenderer lRenderer = null)
+    {
+        if (tRenderer != null)
+        {
+            tRenderer.startColor = color;
+            tRenderer.endColor = color;
+        }
+        else if(lRenderer != null)
+        {
+            lRenderer.startColor = color;
+            lRenderer.endColor = color;
+        }
     }
 
 
