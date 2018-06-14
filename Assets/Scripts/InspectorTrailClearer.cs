@@ -10,9 +10,9 @@ public class InspectorTrailClearer : Editor
         DrawDefaultInspector();
 
         SwipeTrail myScript = (SwipeTrail)target;
-        if (GUILayout.Button("Clear Trail"))
+        if (GUILayout.Button("Retrace Line"))
         {
-            myScript.clearTrail();
+            myScript.RetraceLine();
         }
     }
 }

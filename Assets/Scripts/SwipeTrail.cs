@@ -22,7 +22,7 @@ public class SwipeTrail : MonoBehaviour {
 	void Update () {
         if(trailRenderer.positionCount > 0 && firstTouch)
         {
-            clearTrail();
+            ClearTrail();
             firstTouch = false;
         }
         // Check, if the screen is touched and if the finger / mouse is moving
@@ -44,10 +44,11 @@ public class SwipeTrail : MonoBehaviour {
         if (!Input.GetMouseButton(0) && touchedAlready)
         {
             Debug.Log("Lifted");
-            storeRay();
+            StoreRay();
             touchedAlready = false;
         }
 
+        // Everything inside the following if statement is for the retracing of the line
         if (retraceLine)
         {
             if (rayPositionCounter == 1)
@@ -58,7 +59,7 @@ public class SwipeTrail : MonoBehaviour {
             }
             if(rayPositionCounter == 2)
             {
-                clearTrail();
+                ClearTrail();
             }
                 transform.position = rayPositions[rayPositionCounter];
                 Debug.Log("Moved to: " + rayPositions[rayPositionCounter] + " at position " + rayPositionCounter);
@@ -72,7 +73,7 @@ public class SwipeTrail : MonoBehaviour {
 
     }
 
-    void storeRay()
+    void StoreRay()
     {
         int arrayLength = trailRenderer.positionCount;
         rayPositions = new Vector3[arrayLength];
@@ -85,10 +86,17 @@ public class SwipeTrail : MonoBehaviour {
        
     }
 
-    public void clearTrail()
+    public void ClearTrail()
     {
         trailRenderer.Clear();
         Debug.Log("Trail cleared");
+    }
+
+    public void RetraceLine()
+    {
+   
+        LineRenderer lineRenderer = gameObject.AddComponent<LineRenderer>();
+        lineRenderer.SetPositions(rayPositions);
     }
 
 
