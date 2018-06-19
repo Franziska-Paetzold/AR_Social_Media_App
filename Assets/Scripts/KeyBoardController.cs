@@ -5,19 +5,25 @@ using UnityEngine;
 public class KeyBoardController : MonoBehaviour
 {
 
-    public string stringToEdit = "Hello World";
+    public string textPostContent = "Hello World";
     private TouchScreenKeyboard keyboard;
 
 
     // Opens native keyboard
     void OnGUI()
     {
-        stringToEdit = GUI.TextField(new Rect(10, 10, 200, 30), stringToEdit, 30);
+        textPostContent = GUI.TextField(new Rect(10, 10, 200, 30), textPostContent);
 
-        if (GUI.Button(new Rect(10, 50, 200, 100), "Default"))
+        if (GUI.Button(new Rect(10, 50, 200, 100), "Text post"))
         {
-            keyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
+            keyboard = TouchScreenKeyboard.Open(textPostContent);
         }
+
+        if (keyboard != null)
+        {
+            textPostContent = keyboard.text;
+        }
+
 
     }
 }
