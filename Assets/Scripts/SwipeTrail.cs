@@ -9,7 +9,7 @@ public class SwipeTrail : MonoBehaviour {
     private Vector3[] rayPositions;
     private bool touchedAlready;
     private TrailRenderer trailRenderer;
-    public bool retraceLine;
+    public bool retraceLine; // currently set to true in the inspector
     public int rayPositionCounter = 1;
     private bool firstTouch = true;
 
@@ -45,44 +45,26 @@ public class SwipeTrail : MonoBehaviour {
         if (!Input.GetMouseButton(0) && touchedAlready)
         {
             Debug.Log("Lifted");
+
             StoreRay();
             touchedAlready = false;
         }
 
         // Everything inside the following if statement is for the retracing of the line
-        if (retraceLine)
+        if (retraceLine) 
         {
-            if (rayPositionCounter == 1)
-            {
-                transform.position = rayPositions[1];
-                rayPositionCounter++;
-                return;
-            }
-            if(rayPositionCounter == 2)
-            {
-                ClearTrail();
-            }
-                transform.position = rayPositions[rayPositionCounter];
-                Debug.Log("Moved to: " + rayPositions[rayPositionCounter] + " at position " + rayPositionCounter);
-            rayPositionCounter++;
-            if (rayPositionCounter == rayPositions.Length)
-            {
-                retraceLine = false;
-            }
-            
+            RetraceLine();
         }
 
-    }
+        }
 
-    void StoreRay()
+        void StoreRay()
     {
         int arrayLength = trailRenderer.positionCount;
         rayPositions = new Vector3[arrayLength];
         GetComponent<TrailRenderer>().GetPositions(rayPositions);
-        for (int i = 0; i < rayPositions.Length; i++)
-        {
-            //Debug.Log(rayPositions[i]);
-        }
+     
+        // TODO not to clear at this point in final version
         trailRenderer.Clear();
        
     }
@@ -91,6 +73,28 @@ public class SwipeTrail : MonoBehaviour {
     {
         trailRenderer.Clear();
         Debug.Log("Trail cleared");
+    }
+
+    public void RedrawLine()
+    {
+        if (rayPositionCounter == 1)
+        {
+            transform.position = rayPositions[1];
+            rayPositionCounter++;
+            return;
+        }
+        if (rayPositionCounter == 2)
+        {
+            ClearTrail();
+        }
+        transform.position = rayPositions[rayPositionCounter];
+
+        rayPositionCounter++;
+        if (rayPositionCounter == rayPositions.Length)
+        {
+            retraceLine = false;
+            rayPositionCounter = 1;
+        }
     }
 
     public void RetraceLine()
@@ -104,6 +108,7 @@ public class SwipeTrail : MonoBehaviour {
         lineRenderer.material = TrailMaterial;
         setTrailColour(Color.green, null, lineRenderer);
         lineRenderer.SetPositions(rayPositions);
+        retraceLine = false;
     }
 
     /// <summary>
@@ -118,6 +123,7 @@ public class SwipeTrail : MonoBehaviour {
         {
             tRenderer.startColor = color;
             tRenderer.endColor = color;
+            Debug.Log(tRenderer.endColor.ToString("F5"));
         }
         else if(lRenderer != null)
         {
