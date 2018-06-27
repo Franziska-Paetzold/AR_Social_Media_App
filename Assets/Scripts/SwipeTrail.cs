@@ -5,8 +5,9 @@ using System;
 
 public class SwipeTrail : MonoBehaviour {
 
+    public List<Line> AllLines = new List<Line>();
+
     public Material TrailMaterial;
-    private Vector3[] rayPositions;
     private bool touchedAlready;
     private TrailRenderer trailRenderer;
     public bool retraceLine; // currently set to true in the inspector
@@ -58,11 +59,13 @@ public class SwipeTrail : MonoBehaviour {
 
         }
 
-        void StoreRay()
-    {
+        void StoreRay(){
         int arrayLength = trailRenderer.positionCount;
-        rayPositions = new Vector3[arrayLength];
+        Color currentColour = trailRenderer.endColor;
+        Vector3[] rayPositions = new Vector3[arrayLength];
         GetComponent<TrailRenderer>().GetPositions(rayPositions);
+
+        AllLines.Add(new Line(currentColour, rayPositions));
      
         // TODO not to clear at this point in final version
         trailRenderer.Clear();
@@ -77,9 +80,13 @@ public class SwipeTrail : MonoBehaviour {
 
     public void RedrawLine()
     {
+        // TODO get not only the first line, but the required one
+        Line currentLine = AllLines[0];
         if (rayPositionCounter == 1)
         {
-            transform.position = rayPositions[1];
+            
+           
+            transform.position = currentLine.Positions[1];
             rayPositionCounter++;
             return;
         }
@@ -87,10 +94,10 @@ public class SwipeTrail : MonoBehaviour {
         {
             ClearTrail();
         }
-        transform.position = rayPositions[rayPositionCounter];
+        transform.position = currentLine.Positions[rayPositionCounter];
 
         rayPositionCounter++;
-        if (rayPositionCounter == rayPositions.Length)
+        if (rayPositionCounter == currentLine.Positions.Length)
         {
             retraceLine = false;
             rayPositionCounter = 1;
@@ -99,15 +106,18 @@ public class SwipeTrail : MonoBehaviour {
 
     public void RetraceLine()
     {
+        // TODO get not only the first line, but the required one
+        Line currentLine = AllLines[0];
+
         LineRenderer lineRenderer = gameObject.AddComponent<LineRenderer>();
 
         // Set the width of the Line Renderer
         lineRenderer.SetWidth(0.1F, 0.1F);
         // Set the number of vertex fo the Line Renderer
-        lineRenderer.SetVertexCount(rayPositions.Length);
+        lineRenderer.SetVertexCount(currentLine.Positions.Length);
         lineRenderer.material = TrailMaterial;
         setTrailColour(Color.green, null, lineRenderer);
-        lineRenderer.SetPositions(rayPositions);
+        lineRenderer.SetPositions(currentLine.Positions);
         retraceLine = false;
     }
 

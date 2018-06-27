@@ -2,17 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Line : MonoBehaviour {
-    private Color colour;
-    private Vector3[] positions;
+[System.Serializable]
+public class Line {
+    public Color Colour; // not using it as a property cause I want to see the val in the inspector
+    public Vector3[] Positions;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public Vector2[] PositionsForDatabase;
+
+
+    public Line(Color colour, Vector3[] positions)
+    {
+        Colour = colour;
+        Positions = positions;
+        PositionsForDatabase = MyVector3Extension.toVector2(positions);
+
+    }
+
+}
+
+public static class MyVector3Extension
+{
+    public static Vector2[] toVector2(this Vector3[] v3)
+    {
+        return System.Array.ConvertAll<Vector3, Vector2>(v3, getV3fromV2);
+    }
+
+    public static Vector2 getV3fromV2(Vector3 v3)
+    {
+        return new Vector2(v3.x, v3.y);
+    }
 }
