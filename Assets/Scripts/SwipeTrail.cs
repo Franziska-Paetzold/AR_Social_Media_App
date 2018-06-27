@@ -6,32 +6,31 @@ using System;
 public class SwipeTrail : MonoBehaviour {
 
     public List<Line> AllLines = new List<Line>();
+    public int LineCounter = -1;
 
     public Material TrailMaterial;
-    private bool touchedAlready;
-    private TrailRenderer trailRenderer;
-    public bool retraceLine; // currently set to true in the inspector
-    public int rayPositionCounter = 1;
-    private bool firstTouch = true;
+    public bool TouchedAlready = false;
+    private TrailRenderer TrailRenderer;
+    public bool AllowRetraceLine; // currently set to true in the inspector
+    public int RayPositionCounter = 1;
+    private bool FirstTouch = true;
 
     // Use this for initialization
     void Awake () {
-        trailRenderer = GetComponent<TrailRenderer>();
-        setTrailColour(Color.green, trailRenderer);
+        TrailRenderer = GetComponent<TrailRenderer>();
+        setTrailColour(Color.green, TrailRenderer);
+        // Disabled to get rid of the accidental line in the first frame
+        TrailRenderer.enabled = false;
     }
 	
 
 	void Update () {
-        if(trailRenderer.positionCount > 0 && firstTouch)
-        {
-            ClearTrail();
-            firstTouch = false;
-        }
+        bool fingerOnScreen = (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved) || Input.GetMouseButton(0);
         // Check, if the screen is touched and if the finger / mouse is moving
-		if((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved) || Input.GetMouseButton(0))
+        if (fingerOnScreen)
         {
-            if (touchedAlready == false) touchedAlready = true;
-            Plane objPlane = new Plane(Camera.main.transform.forward * -1, this.transform.position);
+            if (TouchedAlready == false) TouchedAlready = true;
+            Plane objPlane = new Plane(Camera.main.transform.forward * -1, transform.position);
             Ray mRay = Camera.main.ScreenPointToRay(Input.mousePosition);
             float rayDistance;
             if(objPlane.Raycast(mRay, out rayDistance))
@@ -40,85 +39,64 @@ public class SwipeTrail : MonoBehaviour {
             }
         }
 
-
+        if (fingerOnScreen && FirstTouch)
+        {
+            FirstTouch = false;
+            TrailRenderer.enabled = true;
+        }
 
         // Check, if the user has released the screen to store the last drawn line
-        if (!Input.GetMouseButton(0) && touchedAlready)
+        if (!fingerOnScreen && TouchedAlready)
         {
             Debug.Log("Lifted");
-
             StoreRay();
-            touchedAlready = false;
+            CreateLineObject();
         }
 
-        // Everything inside the following if statement is for the retracing of the line
-        if (retraceLine) 
+
+
+        }
+
+        void CreateLineObject()
         {
-            RetraceLine();
-        }
-
-        }
+        GameObject newLine = new GameObject();
+        newLine.transform.parent = transform;
+        newLine.name = "Line segment " + LineCounter;
+        newLine.AddComponent<LineRenderer>();
+        TouchedAlready = false;
+        RetraceLine(newLine.GetComponent<LineRenderer>(), LineCounter);
+        
+    }
 
         void StoreRay(){
-        int arrayLength = trailRenderer.positionCount;
-        Color currentColour = trailRenderer.endColor;
+        int arrayLength = TrailRenderer.positionCount;
+        Color currentColour = TrailRenderer.endColor;
         Vector3[] rayPositions = new Vector3[arrayLength];
         GetComponent<TrailRenderer>().GetPositions(rayPositions);
 
         AllLines.Add(new Line(currentColour, rayPositions));
-     
-        // TODO not to clear at this point in final version
-        trailRenderer.Clear();
-       
+        LineCounter++;
+        
+        // Clears the "stage" so you can draw a new line
+        TrailRenderer.Clear();
+        FirstTouch = true;
+        TrailRenderer.enabled = false;
+
     }
 
-    public void ClearTrail()
+
+    public void RetraceLine(LineRenderer line, int lineNumber)
     {
-        trailRenderer.Clear();
-        Debug.Log("Trail cleared");
-    }
-
-    public void RedrawLine()
-    {
-        // TODO get not only the first line, but the required one
-        Line currentLine = AllLines[0];
-        if (rayPositionCounter == 1)
-        {
-            
-           
-            transform.position = currentLine.Positions[1];
-            rayPositionCounter++;
-            return;
-        }
-        if (rayPositionCounter == 2)
-        {
-            ClearTrail();
-        }
-        transform.position = currentLine.Positions[rayPositionCounter];
-
-        rayPositionCounter++;
-        if (rayPositionCounter == currentLine.Positions.Length)
-        {
-            retraceLine = false;
-            rayPositionCounter = 1;
-        }
-    }
-
-    public void RetraceLine()
-    {
-        // TODO get not only the first line, but the required one
-        Line currentLine = AllLines[0];
-
-        LineRenderer lineRenderer = gameObject.AddComponent<LineRenderer>();
+        
+        Line currentLine = AllLines[lineNumber];
 
         // Set the width of the Line Renderer
-        lineRenderer.SetWidth(0.1F, 0.1F);
+        line.SetWidth(0.1F, 0.1F);
         // Set the number of vertex fo the Line Renderer
-        lineRenderer.SetVertexCount(currentLine.Positions.Length);
-        lineRenderer.material = TrailMaterial;
-        setTrailColour(Color.green, null, lineRenderer);
-        lineRenderer.SetPositions(currentLine.Positions);
-        retraceLine = false;
+        line.positionCount = currentLine.Positions.Length;
+        line.material = TrailMaterial;
+        setTrailColour(Color.green, null, line);
+        line.SetPositions(currentLine.Positions);
     }
 
     /// <summary>

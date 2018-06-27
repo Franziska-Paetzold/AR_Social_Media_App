@@ -4,10 +4,10 @@ using UnityEngine;
 
 [System.Serializable]
 public class Line {
-    public Color Colour; // not using it as a property cause I want to see the val in the inspector
+    public Color Colour; // not using it as a property cause I want to see the vals in the inspector
     public Vector3[] Positions;
 
-    public Vector2[] PositionsForDatabase;
+    private Vector2[] PositionsForDatabase;
 
 
     public Line(Color colour, Vector3[] positions)
@@ -20,6 +20,7 @@ public class Line {
 
 }
 
+// Source: https://answers.unity.com/questions/1034471/c-convert-vector3-to-vector2.html
 public static class MyVector3Extension
 {
     public static Vector2[] toVector2(this Vector3[] v3)
