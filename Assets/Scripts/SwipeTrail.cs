@@ -15,12 +15,31 @@ public class SwipeTrail : MonoBehaviour {
     public int RayPositionCounter = 1;
     private bool FirstTouch = true;
 
+    public Renderer renderer;
+    public ColorPicker picker;
+    public Color Color = Color.red;
+
     // Use this for initialization
     void Awake () {
         TrailRenderer = GetComponent<TrailRenderer>();
-        setTrailColour(Color.green, TrailRenderer);
+        
         // Disabled to get rid of the accidental line in the first frame
         TrailRenderer.enabled = false;
+
+        // Color selection; Source: https://github.com/judah4/HSV-Color-Picker-Unity
+        picker.onValueChanged.AddListener(color =>
+        {
+            renderer.material.color = color;
+            Color = color;
+        });
+
+        renderer.material.color = picker.CurrentColor;
+
+        picker.CurrentColor = Color;
+
+
+        setTrailColour(Color, TrailRenderer);
+
     }
 	
 
@@ -43,6 +62,7 @@ public class SwipeTrail : MonoBehaviour {
         {
             FirstTouch = false;
             TrailRenderer.enabled = true;
+            setTrailColour(Color, TrailRenderer);
         }
 
         // Check, if the user has released the screen to store the last drawn line
@@ -95,7 +115,7 @@ public class SwipeTrail : MonoBehaviour {
         // Set the number of vertex fo the Line Renderer
         line.positionCount = currentLine.Positions.Length;
         line.material = TrailMaterial;
-        setTrailColour(Color.green, null, line);
+        setTrailColour(Color, null, line);
         line.SetPositions(currentLine.Positions);
     }
 
@@ -111,7 +131,6 @@ public class SwipeTrail : MonoBehaviour {
         {
             tRenderer.startColor = color;
             tRenderer.endColor = color;
-            Debug.Log(tRenderer.endColor.ToString("F5"));
         }
         else if(lRenderer != null)
         {
