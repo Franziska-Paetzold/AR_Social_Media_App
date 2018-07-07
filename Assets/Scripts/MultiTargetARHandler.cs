@@ -33,11 +33,13 @@ public class MultiTargetARHandler : MonoBehaviour, IUserDefinedTargetEventHandle
 
     #region PRIVATE_MEMBERS
     const int MAX_TARGETS = 1000;
+    // Relevant for storing
     UserDefinedTargetBuildingBehaviour m_TargetBuildingBehaviour;
     QualityDialog m_QualityDialog;
     ObjectTracker m_ObjectTracker;
     FrameQualityMeter m_FrameQualityMeter;
 
+    // Relevant for storing
     // DataSet that newly defined targets are added to
     DataSet m_UDT_DataSet;
 
@@ -53,7 +55,6 @@ public class MultiTargetARHandler : MonoBehaviour, IUserDefinedTargetEventHandle
     void Start()
     {
         
-        new TargetStorer().Save();
         m_TargetBuildingBehaviour = GetComponent<UserDefinedTargetBuildingBehaviour>();
 
         if (m_TargetBuildingBehaviour)

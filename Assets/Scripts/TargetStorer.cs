@@ -10,7 +10,7 @@ using Vuforia;
 [Serializable]
 public class TargetStorer {
 
-    public List<GameObject> CustomMarkers = new List<GameObject>();
+    public List<GameObject> CustomMarkers = new List<GameObject>(); 
 
     public void Save()
     {
