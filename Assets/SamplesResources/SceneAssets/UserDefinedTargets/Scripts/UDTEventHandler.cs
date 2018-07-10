@@ -30,7 +30,7 @@ public class UDTEventHandler : MonoBehaviour, IUserDefinedTargetEventHandler
 
 
     #region PRIVATE_MEMBERS
-    const int MAX_TARGETS = 1000;
+    const int MAX_TARGETS = 5;
     UserDefinedTargetBuildingBehaviour m_TargetBuildingBehaviour;
     QualityDialog m_QualityDialog;
     ObjectTracker m_ObjectTracker;
@@ -117,7 +117,6 @@ public class UDTEventHandler : MonoBehaviour, IUserDefinedTargetEventHandler
             IEnumerable<Trackable> trackables = m_UDT_DataSet.GetTrackables();
             Trackable oldest = null;
             foreach (Trackable trackable in trackables)
-               
             {
                 if (oldest == null || trackable.ID < oldest.ID)
                     oldest = trackable;
@@ -154,8 +153,7 @@ public class UDTEventHandler : MonoBehaviour, IUserDefinedTargetEventHandler
     public void BuildNewTarget()
     {
         if (m_FrameQuality == ImageTargetBuilder.FrameQuality.FRAME_QUALITY_MEDIUM ||
-            m_FrameQuality == ImageTargetBuilder.FrameQuality.FRAME_QUALITY_HIGH ||
-            m_FrameQuality == ImageTargetBuilder.FrameQuality.FRAME_QUALITY_LOW)
+            m_FrameQuality == ImageTargetBuilder.FrameQuality.FRAME_QUALITY_HIGH)
         {
             // create the name of the next target.
             // the TrackableName of the original, linked ImageTargetBehaviour is extended with a continuous number to ensure unique names
@@ -163,7 +161,6 @@ public class UDTEventHandler : MonoBehaviour, IUserDefinedTargetEventHandler
 
             // generate a new target:
             m_TargetBuildingBehaviour.BuildNewTarget(targetName, ImageTargetTemplate.GetSize().x);
-
         }
         else
         {
