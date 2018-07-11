@@ -209,17 +209,14 @@ public class MultiTargetARHandler : MonoBehaviour, IUserDefinedTargetEventHandle
 
     void OnGUI()
     {
-        if(GUI.Button(new Rect(10, 100, 100, 30), "Save"))
+        if(GUI.Button(new Rect(10, 100, 100, 30), "Test"))
         {
             IEnumerable<Trackable> trackables = m_UDT_DataSet.GetTrackables();
             foreach (Trackable trackable in trackables)
             {
                 Debug.Log(trackable.Name);
             }
-            }
-        if (GUI.Button(new Rect(10, 200, 100, 30), "Load"))
-        {
-
         }
+
     }
 }

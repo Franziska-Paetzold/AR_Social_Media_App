@@ -7,7 +7,6 @@ public class MainAppManager : MonoBehaviour {
     public static MainAppManager mainAppManager;
 
 
-	// Use this for initialization
 	void Awake () {
 		if(mainAppManager == null)
         {
@@ -20,8 +19,19 @@ public class MainAppManager : MonoBehaviour {
         }
 	}
 	
-	// Update is called once per frame
+
 	void Update () {
 		
 	}
+
+    /// <summary>
+    /// Is called when the user triggers a button to create a post
+    /// </summary>
+    /// <param name="draw">True when user wants to draw; false for a text post</param>
+    public void PushPostButton(bool draw)
+    {
+        MultiTargetARHandler ARHandler = FindObjectOfType<MultiTargetARHandler>();
+        ARHandler.BuildNewTarget();
+    }
+
 }
