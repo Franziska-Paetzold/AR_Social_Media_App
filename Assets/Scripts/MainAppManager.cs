@@ -34,7 +34,12 @@ public class MainAppManager : MonoBehaviour {
     public void PushPostButton(bool draw)
     {
         ARHandler = FindObjectOfType<MultiTargetARHandler>();
-        ARHandler.BuildNewTarget();
+        string targetName = ARHandler.BuildNewTarget();
+        GameObject target = GameObject.Find(targetName);
+        Debug.Log(target.name + "gasd");
+        if (draw)
+            target.GetComponentInChildren<SwipeTrail>().gameObject.SetActive(true);
+
         screenshotManager.TakeAShot();
     }
 

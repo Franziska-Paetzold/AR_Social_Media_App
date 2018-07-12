@@ -22,8 +22,8 @@ public class SwipeTrail : MonoBehaviour {
     // Use this for initialization
     void Awake () {
         TrailRenderer = GetComponent<TrailRenderer>();
-        Debug.Log("GOT IT");
         TrailRenderer.startWidth = 0.01f;
+        TrailRenderer.endWidth = 0.01f;
 
         // Disabled to get rid of the accidental line in the first frame
         TrailRenderer.enabled = false;

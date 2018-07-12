@@ -110,7 +110,7 @@ public class MultiTargetARHandler : MonoBehaviour, IUserDefinedTargetEventHandle
     /// </summary>
     public void OnNewTrackableSource(TrackableSource trackableSource)
     {
-        m_TargetCounter++;
+        //m_TargetCounter++;
         // Deactivates the dataset first
         m_ObjectTracker.DeactivateDataSet(m_UDT_DataSet);
 
@@ -158,7 +158,7 @@ public class MultiTargetARHandler : MonoBehaviour, IUserDefinedTargetEventHandle
     /// Instantiates a new user-defined target and is also responsible for dispatching callback to
     /// IUserDefinedTargetEventHandler::OnNewTrackableSource
     /// </summary>
-    public void BuildNewTarget()
+    public string BuildNewTarget()
     {
         if (m_FrameQuality == ImageTargetBuilder.FrameQuality.FRAME_QUALITY_MEDIUM ||
             m_FrameQuality == ImageTargetBuilder.FrameQuality.FRAME_QUALITY_HIGH ||
@@ -170,8 +170,8 @@ public class MultiTargetARHandler : MonoBehaviour, IUserDefinedTargetEventHandle
 
             // generate a new target:
             m_TargetBuildingBehaviour.BuildNewTarget(targetName, ImageTargetTemplate.GetSize().x);
-            
 
+            return "UserDefinedTarget-" + m_TargetCounter;
         }
         else
         {
@@ -182,6 +182,7 @@ public class MultiTargetARHandler : MonoBehaviour, IUserDefinedTargetEventHandle
                 m_QualityDialog.GetComponent<CanvasGroup>().alpha = 1;
                 StartCoroutine(FadeOutQualityDialog());
             }
+            return null;
         }
     }
 
