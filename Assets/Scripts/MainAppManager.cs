@@ -6,8 +6,11 @@ public class MainAppManager : MonoBehaviour {
 
     public static MainAppManager mainAppManager;
 
+    public MultiTargetARHandler ARHandler;
+    public ScreenshotManager screenshotManager;
 
-	void Awake () {
+
+    void Awake () {
 		if(mainAppManager == null)
         {
             mainAppManager = this;
@@ -30,8 +33,9 @@ public class MainAppManager : MonoBehaviour {
     /// <param name="draw">True when user wants to draw; false for a text post</param>
     public void PushPostButton(bool draw)
     {
-        MultiTargetARHandler ARHandler = FindObjectOfType<MultiTargetARHandler>();
+        ARHandler = FindObjectOfType<MultiTargetARHandler>();
         ARHandler.BuildNewTarget();
+        screenshotManager.TakeAShot();
     }
 
 }

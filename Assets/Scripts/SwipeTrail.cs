@@ -17,12 +17,14 @@ public class SwipeTrail : MonoBehaviour {
 
     public Renderer renderer;
     public ColorPicker picker;
-    public Color Color = Color.red;
+    private Color Color = Color.red;
 
     // Use this for initialization
     void Awake () {
         TrailRenderer = GetComponent<TrailRenderer>();
-        
+        Debug.Log("GOT IT");
+        TrailRenderer.startWidth = 0.01f;
+
         // Disabled to get rid of the accidental line in the first frame
         TrailRenderer.enabled = false;
 
@@ -111,7 +113,7 @@ public class SwipeTrail : MonoBehaviour {
         Line currentLine = AllLines[lineNumber];
 
         // Set the width of the Line Renderer
-        line.SetWidth(0.1F, 0.1F);
+        line.SetWidth(0.01f, 0.01f);
         // Set the number of vertex fo the Line Renderer
         line.positionCount = currentLine.Positions.Length;
         line.material = TrailMaterial;
