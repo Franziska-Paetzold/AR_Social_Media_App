@@ -41,6 +41,7 @@ public class MainAppManager : MonoBehaviour {
             target.GetComponentInChildren<SwipeTrail>().gameObject.SetActive(true);
 
         screenshotManager.TakeAShot();
+        Texture2D takenScreenshot = screenshotManager.GetScreenshotImage();
     }
 
 }

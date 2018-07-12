@@ -63,7 +63,7 @@ public class ScreenshotManager : MonoBehaviour {
 
 
 
-    Texture2D GetScreenshotImage()
+    public Texture2D GetScreenshotImage()
     {
         string filePath = Application.dataPath + "/../" + lastScreenshotPath;
         Texture2D texture = null;
@@ -74,9 +74,9 @@ public class ScreenshotManager : MonoBehaviour {
             texture.LoadImage(fileBytes);
         
         Debug.Log(filePath);
-        bg.transform.localScale += new Vector3(Cam.rect.y, 0, Cam.rect.x);
+        //bg.transform.localScale += new Vector3(Cam.rect.y, 0, Cam.rect.x);
         //Graphics.Blit(texture, renderTexture);
-        bg.GetComponent<MeshRenderer>().material.mainTexture = texture;
+        //bg.GetComponent<MeshRenderer>().material.mainTexture = texture;
         //Cam.targetTexture = renderTexture;
         return texture;
     }
