@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class SwipeTrail : MonoBehaviour {
+public class SwipeTrail : MonoBehaviour
+{
 
     public List<Line> AllLines = new List<Line>();
     public int LineCounter = -1;
@@ -13,14 +16,18 @@ public class SwipeTrail : MonoBehaviour {
     private TrailRenderer TrailRenderer;
     public bool AllowRetraceLine; // currently set to true in the inspector
     public int RayPositionCounter = 1;
-    private bool FirstTouch = true;
+    public bool FirstTouch = true;
 
     public Renderer renderer;
     public ColorPicker picker;
+    public Image pickerLine;
+    public GameObject pickerHue;
+
     private Color Color = Color.red;
 
     // Use this for initialization
-    void Awake () {
+    void Awake()
+    {
         TrailRenderer = GetComponent<TrailRenderer>();
         TrailRenderer.startWidth = 0.01f;
         TrailRenderer.endWidth = 0.01f;
@@ -28,11 +35,13 @@ public class SwipeTrail : MonoBehaviour {
         // Disabled to get rid of the accidental line in the first frame
         TrailRenderer.enabled = false;
 
+
         // Color selection; Source: https://github.com/judah4/HSV-Color-Picker-Unity
         picker.onValueChanged.AddListener(color =>
         {
             renderer.material.color = color;
             Color = color;
+            pickerLine.color = color;
         });
 
         renderer.material.color = picker.CurrentColor;
@@ -43,28 +52,37 @@ public class SwipeTrail : MonoBehaviour {
         setTrailColour(Color, TrailRenderer);
 
     }
-	
 
-	void Update () {
-        bool fingerOnScreen = (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved) || Input.GetMouseButton(0);
+
+    void Update()
+    {
         // Check, if the screen is touched and if the finger / mouse is moving
-        if (fingerOnScreen)
+        bool fingerOnScreen = (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved) || Input.GetMouseButton(0);
+        // Check, if user is using the colour bar
+        bool usingColour = EventSystem.current.currentSelectedGameObject != null && EventSystem.current.currentSelectedGameObject.GetComponent<Slider>() != null;
+        if (fingerOnScreen && !usingColour)
         {
             if (TouchedAlready == false) TouchedAlready = true;
             Plane objPlane = new Plane(Camera.main.transform.forward * -1, transform.position);
             Ray mRay = Camera.main.ScreenPointToRay(Input.mousePosition);
             float rayDistance;
-            if(objPlane.Raycast(mRay, out rayDistance))
+            if (objPlane.Raycast(mRay, out rayDistance))
             {
                 transform.position = mRay.GetPoint(rayDistance);
             }
         }
 
-        if (fingerOnScreen && FirstTouch)
+        // To avoid an additional line
+        if (fingerOnScreen && FirstTouch && !usingColour)
         {
             FirstTouch = false;
             TrailRenderer.enabled = true;
             setTrailColour(Color, TrailRenderer);
+        }
+
+        if (!fingerOnScreen)
+        {
+            TrailRenderer.enabled = false;
         }
 
         // Check, if the user has released the screen to store the last drawn line
@@ -77,20 +95,21 @@ public class SwipeTrail : MonoBehaviour {
 
 
 
-        }
+    }
 
-        void CreateLineObject()
-        {
+    void CreateLineObject()
+    {
         GameObject newLine = new GameObject();
         newLine.transform.parent = transform;
         newLine.name = "Line segment " + LineCounter;
         newLine.AddComponent<LineRenderer>();
         TouchedAlready = false;
         RetraceLine(newLine.GetComponent<LineRenderer>(), LineCounter);
-        
+
     }
 
-        void StoreRay(){
+    void StoreRay()
+    {
         int arrayLength = TrailRenderer.positionCount;
         Color currentColour = TrailRenderer.endColor;
         Vector3[] rayPositions = new Vector3[arrayLength];
@@ -98,7 +117,7 @@ public class SwipeTrail : MonoBehaviour {
 
         AllLines.Add(new Line(currentColour, rayPositions));
         LineCounter++;
-        
+
         // Clears the "stage" so you can draw a new line
         TrailRenderer.Clear();
         FirstTouch = true;
@@ -109,7 +128,7 @@ public class SwipeTrail : MonoBehaviour {
 
     public void RetraceLine(LineRenderer line, int lineNumber)
     {
-        
+
         Line currentLine = AllLines[lineNumber];
 
         // Set the width of the Line Renderer
@@ -134,7 +153,7 @@ public class SwipeTrail : MonoBehaviour {
             tRenderer.startColor = color;
             tRenderer.endColor = color;
         }
-        else if(lRenderer != null)
+        else if (lRenderer != null)
         {
             lRenderer.startColor = color;
             lRenderer.endColor = color;
@@ -142,5 +161,5 @@ public class SwipeTrail : MonoBehaviour {
     }
 
 
-  
+
 }

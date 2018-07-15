@@ -110,7 +110,7 @@ public class MultiTargetARHandler : MonoBehaviour, IUserDefinedTargetEventHandle
     /// </summary>
     public void OnNewTrackableSource(TrackableSource trackableSource)
     {
-        //m_TargetCounter++;
+       
         // Deactivates the dataset first
         m_ObjectTracker.DeactivateDataSet(m_UDT_DataSet);
 
@@ -149,6 +149,9 @@ public class MultiTargetARHandler : MonoBehaviour, IUserDefinedTargetEventHandle
 
         // Make sure TargetBuildingBehaviour keeps scanning...
         m_TargetBuildingBehaviour.StartScanning();
+
+
+        m_TargetCounter++;
     }
     #endregion IUserDefinedTargetEventHandler implementation
 

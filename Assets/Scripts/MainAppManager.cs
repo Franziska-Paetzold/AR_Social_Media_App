@@ -8,6 +8,9 @@ public class MainAppManager : MonoBehaviour {
 
     public MultiTargetARHandler ARHandler;
     public ScreenshotManager screenshotManager;
+    public GameObject UIElements;
+
+    private bool draw;
 
 
     void Awake () {
@@ -33,15 +36,45 @@ public class MainAppManager : MonoBehaviour {
     /// <param name="draw">True when user wants to draw; false for a text post</param>
     public void PushPostButton(bool draw)
     {
+        UIElements.SetActive(false);
         ARHandler = FindObjectOfType<MultiTargetARHandler>();
         string targetName = ARHandler.BuildNewTarget();
-        GameObject target = GameObject.Find(targetName);
-        Debug.Log(target.name + "gasd");
-        if (draw)
-            target.GetComponentInChildren<SwipeTrail>().gameObject.SetActive(true);
 
-        screenshotManager.TakeAShot();
-        Texture2D takenScreenshot = screenshotManager.GetScreenshotImage();
+        StartCoroutine(FindTarget(targetName));
+
+        this.draw = draw;
+
+        //screenshotManager.TakeAShot();
+        //Texture2D takenScreenshot = screenshotManager.GetScreenshotImage();
+    }
+
+    IEnumerator FindTarget(string targetName)
+    {
+
+        GameObject target = null;
+        target = GameObject.Find(targetName);
+
+        while (target == null)
+        {
+            target = GameObject.Find(targetName);
+            Debug.Log("searching " + targetName);
+            yield return null;
+        }
+
+        ProcessPostRequest(target);
+    }
+
+    private void ProcessPostRequest(GameObject target)
+    {
+        if (draw)
+        {
+            target.GetComponentInChildren(typeof(Drawer), true).gameObject.SetActive(true);
+            TrailRenderer traili = target.GetComponentInChildren(typeof(TrailRenderer)) as TrailRenderer;
+            traili.enabled = false;
+            Debug.Log(traili, traili.gameObject);
+        }
+        else if (!draw)
+            target.GetComponentInChildren(typeof(Texter), true).gameObject.SetActive(true);
     }
 
 }
