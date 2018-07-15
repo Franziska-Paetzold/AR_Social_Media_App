@@ -7,8 +7,10 @@ public class MainAppManager : MonoBehaviour {
     public static MainAppManager mainAppManager;
 
     public MultiTargetARHandler ARHandler;
-    public ScreenshotManager screenshotManager;
-    public GameObject UIElements;
+    public ScreenshotManager ScreenshotManager;
+    public GameObject MainUIElements;
+    public GameObject PostUIElements;
+    public CloudUpLoading TargetUploader;
 
     private bool draw;
 
@@ -34,9 +36,15 @@ public class MainAppManager : MonoBehaviour {
     /// Is called when the user triggers a button to create a post
     /// </summary>
     /// <param name="draw">True when user wants to draw; false for a text post</param>
-    public void PushPostButton(bool draw)
+    public void PushCreateButton(bool draw)
     {
-        UIElements.SetActive(false);
+        
+
+        // Make a screenshot for the marker to upload
+        ScreenshotManager.TakeAShot();
+
+
+
         ARHandler = FindObjectOfType<MultiTargetARHandler>();
         string targetName = ARHandler.BuildNewTarget();
 
@@ -44,8 +52,8 @@ public class MainAppManager : MonoBehaviour {
 
         this.draw = draw;
 
-        //screenshotManager.TakeAShot();
-        //Texture2D takenScreenshot = screenshotManager.GetScreenshotImage();
+        
+        
     }
 
     IEnumerator FindTarget(string targetName)
@@ -66,15 +74,23 @@ public class MainAppManager : MonoBehaviour {
 
     private void ProcessPostRequest(GameObject target)
     {
+        Texture2D takenScreenshot = ScreenshotManager.GetScreenshotImage();
+
+        MainUIElements.SetActive(false);
+        PostUIElements.SetActive(true);
+
         if (draw)
         {
             target.GetComponentInChildren(typeof(Drawer), true).gameObject.SetActive(true);
-            TrailRenderer traili = target.GetComponentInChildren(typeof(TrailRenderer)) as TrailRenderer;
-            traili.enabled = false;
-            Debug.Log(traili, traili.gameObject);
         }
         else if (!draw)
             target.GetComponentInChildren(typeof(Texter), true).gameObject.SetActive(true);
+
+
+        TargetUploader.texture = takenScreenshot;
+        TargetUploader.CallPostTarget();
     }
+
+    
 
 }

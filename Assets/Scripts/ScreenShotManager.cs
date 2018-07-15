@@ -38,7 +38,7 @@ public class ScreenshotManager : MonoBehaviour {
     public void TakeAShot()
     {
         HideUI(true);
-        StartCoroutine("CaptureIt");
+        StartCoroutine(CaptureIt());
     }
 
     IEnumerator CaptureIt()
