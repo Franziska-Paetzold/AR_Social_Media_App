@@ -10,9 +10,10 @@ public class MainAppManager : MonoBehaviour {
     public ScreenshotManager ScreenshotManager;
     public GameObject MainUIElements;
     public GameObject PostUIElements;
-    public CloudUpLoading TargetUploader;
+    public CloudUploading TargetUploader;
 
     private bool draw;
+    private GameObject target = null;
 
 
     void Awake () {
@@ -59,7 +60,7 @@ public class MainAppManager : MonoBehaviour {
     IEnumerator FindTarget(string targetName)
     {
 
-        GameObject target = null;
+        
         target = GameObject.Find(targetName);
 
         while (target == null)
@@ -69,10 +70,10 @@ public class MainAppManager : MonoBehaviour {
             yield return null;
         }
 
-        ProcessPostRequest(target);
+        ProcessPostRequest();
     }
 
-    private void ProcessPostRequest(GameObject target)
+    private void ProcessPostRequest()
     {
         Texture2D takenScreenshot = ScreenshotManager.GetScreenshotImage();
 
@@ -88,9 +89,18 @@ public class MainAppManager : MonoBehaviour {
 
 
         TargetUploader.texture = takenScreenshot;
-        TargetUploader.CallPostTarget();
+        
     }
 
-    
+    public void PushPostButton()
+    {
+        TargetUploader.CallPostTarget();
+
+        MainUIElements.SetActive(true);
+        PostUIElements.SetActive(false);
+
+        target.GetComponentInChildren<SwipeTrail>().enabled = false;
+        target.GetComponentInChildren<ColorPicker>().gameObject.SetActive(false);
+    }
 
 }

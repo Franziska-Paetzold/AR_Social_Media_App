@@ -18,7 +18,7 @@ public class PostNewTrackableRequest
     public string application_metadata;
 }
 
-public class CloudUpLoading : MonoBehaviour
+public class CloudUploading : MonoBehaviour
 {
     public bool justDoIt;
     public Texture2D texture;
