@@ -3,7 +3,7 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: VuforiaConfiguration
   m_EditorClassIdentifier: 
   vuforia:
-    vuforiaLicenseKey: 
+    vuforiaLicenseKey: ATDSqRj/////AAABmSmNZFlBbEBmhBBhqKRi2+ITcK7J92GbFFF3qZRJ5sV0gwf0d2DZuA1sQstfhi1zE66YrQ4FPPLjauPbuyX9fU0FlwFcflVcNoTkVHfmgmfQlVlGIZFDyZJ8THUk2QmPlkdu48l/4isQ3tE59f/5ZjpN/7waQHwkGM+obUcffsLKCaC4XK4337P16N6VpW8h8EjvXq/CqXrmv/+6Un42Lkg64+8J9tmR1akjhL1ydcJ2mPawGmd1xDwL4MQ5ypeU7Z5m6yhqAVOtb+qYQigXwmjNh0EfIzyfMKatIVeHLBGAeiNccJAoSk6KoHDOI6h9TjA/aWnU2GtKBAsci2b75jwMgUbLynFKv9BQWaviZFlh
     ufoLicenseKey: QWU1RFpFNy8vLy8vQUFBQUtESzNlU0ZwM2tmVmo5UURINXNLWDBoRUZDTEJpVmlNdnNGQm5CSWtlSFNYVUZKRGlvcks0NXdWN3NjcXhtTjhkRGcrQWY0WlQ3MkVPclQwMEN1Z3pQS1VaL0l6cW1RdnBUOEYvcUJNdURRa3UrZ3NpME5jQUI5NlJycENvc0MwSUNVTjd1L1B4YXh1TDdUS3Z0SFBKa0JFU2VzanRrYjYvbkhXTFNmWmJLUXpHcHFmclhqTHR3cERnbzNqZUJucUpVR0dreVR0b0RxV2NOM3FZOVRzdXp6akVIS3VxWkxaU3BRa3dKTXJ6eUF4VC9pVCthUlloNG5qWUUyQ3FLdm9XekhzeEt6SVkzNVZlM2JrN2k2aHJMVERISXhwbitFZG5mYXZUWmVSZnhCQ0hqZFMyeldNbkRmb2thNTB6aXArbnlTa1RoNW9rSVdFaWRDT2RhSXFXaU5rWm1nbWZOcnMvK3g2Q0EyVjJjKzU=
     delayedInitialization: 0
     cameraDeviceModeSetting: -1
