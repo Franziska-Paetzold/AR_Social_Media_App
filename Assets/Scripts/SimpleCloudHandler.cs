@@ -9,6 +9,7 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler
     private CloudRecoBehaviour mCloudRecoBehaviour;
     private bool mIsScanning = false;
     private string mTargetMetadata = "";
+    public LineManager lineManager = new LineManager();
     // Use this for initialization
     void Start()
     {
@@ -61,6 +62,7 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler
     {
         // do something with the target metadata
         mTargetMetadata = targetSearchResult.MetaData;
+        lineManager = JsonUtility.FromJson<LineManager>(mTargetMetadata);        
         // stop the target finder (i.e. stop scanning the cloud)
         //mCloudRecoBehaviour.CloudRecoEnabled = false;
 
@@ -80,9 +82,9 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler
     void OnGUI()
     {
         // Display current 'scanning' status
-        GUI.Box(new Rect(100, 100, 200, 50), mIsScanning ? "Scanning" : "Not scanning");
+        //GUI.Box(new Rect(100, 100, 200, 50), mIsScanning ? "Scanning" : "Not scanning");
         // Display metadata of latest detected cloud-target
-        GUI.Box(new Rect(100, 200, 200, 50), "Metadata: " + mTargetMetadata);
+        GUI.Box(new Rect(100, 10, 150, 50), "Metadata: " + mTargetMetadata);
         // If not scanning, show button
         // so that user can restart cloud scanning
         if (!mIsScanning)

@@ -22,6 +22,7 @@ public class CloudUploading : MonoBehaviour
 {
     public bool justDoIt;
     public Texture2D texture;
+    public string metadataStr;
 
     // Your Server Access Key
     private string access_key = "e620edcd9e50d369339c21a83248d05738cc842b";
@@ -68,7 +69,7 @@ public class CloudUploading : MonoBehaviour
         tex.Apply();
         byte[] image = tex.EncodeToPNG();
 
-        string metadataStr = "Data information";//May use for key,name...in game
+        // metadataStr = "Data information"; 
         byte[] metadata = System.Text.ASCIIEncoding.ASCII.GetBytes(metadataStr);
         PostNewTrackableRequest model = new PostNewTrackableRequest();
         model.name = targetName;

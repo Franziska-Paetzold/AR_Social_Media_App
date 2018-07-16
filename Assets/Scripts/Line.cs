@@ -4,18 +4,42 @@ using UnityEngine;
 
 [System.Serializable]
 public class Line {
-    public Color Colour; // not using it as a property cause I want to see the vals in the inspector
+    // Fields for JSON file
+    public Vector3 colour;
     public Vector3[] Positions;
 
+
+
+    private Color Colour;
+    private Vector3Storer[] SerializablePositions;
     private Vector2[] PositionsForDatabase;
 
 
-    public Line(Color colour, Vector3[] positions)
+
+    public Line(Color drawnColour, Vector3[] positions)
     {
-        Colour = colour;
+        
+        Colour = drawnColour;
         Positions = positions;
         PositionsForDatabase = MyVector3Extension.toVector2(positions);
+        SerializePositions();
+        //jsonObject = JsonUtility.ToJson(this);
+        Debug.Log(Colour);
+        colour.x = Colour.r;
+        colour.y = Colour.g;
+        colour.z = Colour.b;
+    }
 
+    public void SerializePositions()
+    {
+        SerializablePositions = new Vector3Storer[Positions.Length];
+        for (int i = 0; i < Positions.Length; i++)
+        {
+            float x = Positions[i].x;
+            float y = Positions[i].y;
+            float z = Positions[i].z;
+            SerializablePositions[i] = new Vector3Storer(x, y, z);
+        }
     }
 
 }
@@ -32,4 +56,20 @@ public static class MyVector3Extension
     {
         return new Vector2(v3.x, v3.y);
     }
+}
+
+[System.Serializable]
+public class Vector3Storer
+{
+    public float x;
+    public float y;
+    public float z;
+
+    public Vector3Storer(float x, float y, float z)
+    {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+
 }

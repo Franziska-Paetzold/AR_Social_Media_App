@@ -94,13 +94,21 @@ public class MainAppManager : MonoBehaviour {
 
     public void PushPostButton()
     {
-        TargetUploader.CallPostTarget();
+        
+        
 
         MainUIElements.SetActive(true);
         PostUIElements.SetActive(false);
 
-        target.GetComponentInChildren<SwipeTrail>().enabled = false;
-        target.GetComponentInChildren<ColorPicker>().gameObject.SetActive(false);
+        if (draw)
+        {
+            target.GetComponentInChildren<SwipeTrail>().enabled = false;
+            target.GetComponentInChildren<ColorPicker>().gameObject.SetActive(false);
+            TargetUploader.metadataStr = target.GetComponentInChildren<SwipeTrail>().getJsonGraffiti();
+        }
+
+
+        TargetUploader.CallPostTarget();
     }
 
 }

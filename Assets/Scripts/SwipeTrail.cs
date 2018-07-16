@@ -5,10 +5,12 @@ using System;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+
 public class SwipeTrail : MonoBehaviour
 {
-
-    public List<Line> AllLines = new List<Line>();
+    public LineManager lineManager = new LineManager();
+    public string jsonObject;
+    //public List<Line> AllLines = new List<Line>();
     public int LineCounter = -1;
 
     public Material TrailMaterial;
@@ -28,6 +30,7 @@ public class SwipeTrail : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
+
         TrailRenderer = GetComponent<TrailRenderer>();
         TrailRenderer.startWidth = 0.01f;
         TrailRenderer.endWidth = 0.01f;
@@ -115,7 +118,7 @@ public class SwipeTrail : MonoBehaviour
         Vector3[] rayPositions = new Vector3[arrayLength];
         GetComponent<TrailRenderer>().GetPositions(rayPositions);
 
-        AllLines.Add(new Line(currentColour, rayPositions));
+        lineManager.AllLines.Add(new Line(currentColour, rayPositions));
         LineCounter++;
 
         // Clears the "stage" so you can draw a new line
@@ -123,13 +126,20 @@ public class SwipeTrail : MonoBehaviour
         FirstTouch = true;
         TrailRenderer.enabled = false;
 
+        
+    }
+
+    public string getJsonGraffiti()
+    {
+        jsonObject = JsonUtility.ToJson(lineManager);
+        return jsonObject;
     }
 
 
     public void RetraceLine(LineRenderer line, int lineNumber)
     {
 
-        Line currentLine = AllLines[lineNumber];
+        Line currentLine = lineManager.AllLines[lineNumber];
 
         // Set the width of the Line Renderer
         line.SetWidth(0.01f, 0.01f);
@@ -162,4 +172,10 @@ public class SwipeTrail : MonoBehaviour
 
 
 
+}
+
+[System.Serializable]
+public class LineManager{
+    public string PostType = "Graffiti";
+    public List<Line> AllLines = new List<Line>();
 }
