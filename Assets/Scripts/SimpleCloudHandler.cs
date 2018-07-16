@@ -2,6 +2,8 @@
 using Vuforia;
 public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler
 {
+    public ImageTargetBehaviour ImageTargetTemplate;
+
     private CloudRecoBehaviour mCloudRecoBehaviour;
     private bool mIsScanning = false;
     private string mTargetMetadata = "";
@@ -47,7 +49,18 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler
         // do something with the target metadata
         mTargetMetadata = targetSearchResult.MetaData;
         // stop the target finder (i.e. stop scanning the cloud)
-        mCloudRecoBehaviour.CloudRecoEnabled = false;
+        //mCloudRecoBehaviour.CloudRecoEnabled = false;
+
+        // Build augmentation based on target
+        if (ImageTargetTemplate)
+        {
+            // enable the new result with the same ImageTargetBehaviour:
+            ObjectTracker tracker = TrackerManager.Instance.GetTracker<ObjectTracker>();
+            ImageTargetBehaviour imageTargetBehaviour =
+             (ImageTargetBehaviour)tracker.TargetFinder.EnableTracking(
+             targetSearchResult, ImageTargetTemplate.gameObject);
+        }
+
     }
 
     void OnGUI()
