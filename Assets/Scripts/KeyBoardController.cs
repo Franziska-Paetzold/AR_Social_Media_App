@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class KeyBoardController : MonoBehaviour
 {
 
-    private string textPostContent = "";
-    private TouchScreenKeyboard keyboard;
+    public string textPostContent = "";
+    private TouchScreenKeyboard manualKeyboard;
+    public Text textField;
   
 
     // Opens native keyboard
@@ -20,14 +22,18 @@ public class KeyBoardController : MonoBehaviour
                                  
         if (textPostButton)
         {
-            keyboard = TouchScreenKeyboard.Open(textPostContent);
+            manualKeyboard = TouchScreenKeyboard.Open(textPostContent);
             TouchScreenKeyboard.hideInput = true;
-            textPostContent = GUI.TextField(new Rect(Screen.width/2, Screen.height/2, 200, 200), textPostContent);
+            textField.text = textPostContent;
         }
 
-        if (keyboard != null)
+        if (manualKeyboard.active){
+            textField.text = textPostContent;
+        }
+
+        if (manualKeyboard != null)
         {
-            textPostContent = keyboard.text;
+            textPostContent = manualKeyboard.text;
         }
 
 
