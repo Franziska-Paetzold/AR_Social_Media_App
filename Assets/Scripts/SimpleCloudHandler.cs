@@ -3,6 +3,8 @@ using Vuforia;
 public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler
 {
     public ImageTargetBehaviour ImageTargetTemplate;
+    public GameObject ObjectToAugment;
+    public GameObject Camera;
 
     private CloudRecoBehaviour mCloudRecoBehaviour;
     private bool mIsScanning = false;
@@ -16,6 +18,17 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler
         if (mCloudRecoBehaviour)
         {
             mCloudRecoBehaviour.RegisterEventHandler(this);
+        }
+    }
+
+    void Update()
+    {
+        if (ImageTargetTemplate)
+        {
+            
+            ObjectToAugment.transform.localPosition = Vector3.Lerp(ObjectToAugment.transform.localPosition, new Vector3(0, 0, 0), Time.deltaTime * 5.0f);
+            ObjectToAugment.transform.localRotation = Quaternion.Slerp(ObjectToAugment.transform.localRotation, Quaternion.identity, Time.deltaTime * 5.0f);
+
         }
     }
 
@@ -59,6 +72,7 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler
             ImageTargetBehaviour imageTargetBehaviour =
              (ImageTargetBehaviour)tracker.TargetFinder.EnableTracking(
              targetSearchResult, ImageTargetTemplate.gameObject);
+            ObjectToAugment.transform.position = Camera.transform.position;
         }
 
     }
