@@ -4,12 +4,14 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler
 {
     public ImageTargetBehaviour ImageTargetTemplate;
     public GameObject ObjectToAugment;
-    public GameObject Camera;
+    public GameObject CameraOffset;
+    public PostReconstructor Reconstructor; // As well TrackableEventHandler
 
-    private CloudRecoBehaviour mCloudRecoBehaviour;
+    private ObjectTracker tracker;
+    public CloudRecoBehaviour mCloudRecoBehaviour;
     private bool mIsScanning = false;
     private string mTargetMetadata = "";
-    public LineManager lineManager = new LineManager();
+    
     // Use this for initialization
     void Start()
     {
@@ -27,14 +29,15 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler
         if (ImageTargetTemplate)
         {
             
-            ObjectToAugment.transform.localPosition = Vector3.Lerp(ObjectToAugment.transform.localPosition, new Vector3(0, 0, 0), Time.deltaTime * 5.0f);
-            ObjectToAugment.transform.localRotation = Quaternion.Slerp(ObjectToAugment.transform.localRotation, Quaternion.identity, Time.deltaTime * 5.0f);
+            //ObjectToAugment.transform.localPosition = Vector3.Lerp(ObjectToAugment.transform.localPosition, new Vector3(0, 0, 0), Time.deltaTime * 5.0f);
+            //ObjectToAugment.transform.localRotation = Quaternion.Slerp(ObjectToAugment.transform.localRotation, Quaternion.identity, Time.deltaTime * 5.0f);
 
         }
     }
 
     public void OnInitialized()
     {
+        tracker = TrackerManager.Instance.GetTracker<ObjectTracker>();
         Debug.Log("Cloud Reco initialized");
     }
     public void OnInitError(TargetFinder.InitState initError)
@@ -52,30 +55,34 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler
         if (scanning)
         {
             // clear all known trackables
-            var tracker = TrackerManager.Instance.GetTracker<ObjectTracker>();
+            
             tracker.TargetFinder.ClearTrackables(false);
         }
     }
+    
 
     // Here we handle a cloud target recognition event
     public void OnNewSearchResult(TargetFinder.TargetSearchResult targetSearchResult)
     {
+        if (targetSearchResult.MetaData == null) return;
         // do something with the target metadata
         mTargetMetadata = targetSearchResult.MetaData;
-        lineManager = JsonUtility.FromJson<LineManager>(mTargetMetadata);        
+        Reconstructor.lineManager = JsonUtility.FromJson<LineManager>(mTargetMetadata);
         // stop the target finder (i.e. stop scanning the cloud)
         //mCloudRecoBehaviour.CloudRecoEnabled = false;
 
-        // Build augmentation based on target
-        if (ImageTargetTemplate)
-        {
-            // enable the new result with the same ImageTargetBehaviour:
-            ObjectTracker tracker = TrackerManager.Instance.GetTracker<ObjectTracker>();
-            ImageTargetBehaviour imageTargetBehaviour =
-             (ImageTargetBehaviour)tracker.TargetFinder.EnableTracking(
+        ImageTargetBehaviour imageTargetBehaviour = (ImageTargetBehaviour)tracker.TargetFinder.EnableTracking(
              targetSearchResult, ImageTargetTemplate.gameObject);
-            ObjectToAugment.transform.position = Camera.transform.position;
+
+        // Build augmentation based on target
+        if (ImageTargetTemplate != null)
+        {
+            mCloudRecoBehaviour.CloudRecoEnabled = false;
+            // enable the new result with the same ImageTargetBehaviour:
+
+            //ObjectToAugment.transform.position = CameraOffset.transform.position;
         }
+
 
     }
 

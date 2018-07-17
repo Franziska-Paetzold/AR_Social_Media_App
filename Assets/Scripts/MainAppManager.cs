@@ -75,7 +75,7 @@ public class MainAppManager : MonoBehaviour {
 
     private void ProcessPostRequest()
     {
-        Texture2D takenScreenshot = ScreenshotManager.GetScreenshotImage();
+        
 
         MainUIElements.SetActive(false);
         PostUIElements.SetActive(true);
@@ -88,14 +88,15 @@ public class MainAppManager : MonoBehaviour {
             target.GetComponentInChildren(typeof(Texter), true).gameObject.SetActive(true);
 
 
-        TargetUploader.texture = takenScreenshot;
+        
         
     }
 
     public void PushPostButton()
     {
-        
-        
+
+        Texture2D takenScreenshot = ScreenshotManager.GetScreenshotImage();
+        TargetUploader.texture = takenScreenshot;
 
         MainUIElements.SetActive(true);
         PostUIElements.SetActive(false);

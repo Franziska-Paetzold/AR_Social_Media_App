@@ -44,7 +44,7 @@ public class ScreenshotManager : MonoBehaviour {
     IEnumerator CaptureIt()
     {
         string timeStamp = System.DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss");
-        string fileName = "Screenshot" + timeStamp + ".png";
+        string fileName = "Screenshot" + timeStamp + ".jpg";
         lastScreenshotPath = fileName;
         ScreenCapture.CaptureScreenshot(lastScreenshotPath);
         yield return new WaitForEndOfFrame();
@@ -65,7 +65,7 @@ public class ScreenshotManager : MonoBehaviour {
 
     public Texture2D GetScreenshotImage()
     {
-        string filePath = Application.dataPath + "/../" + lastScreenshotPath;
+        string filePath = Application.persistentDataPath + "/" + lastScreenshotPath;
         Texture2D texture = null;
         byte[] fileBytes;
       
@@ -74,10 +74,7 @@ public class ScreenshotManager : MonoBehaviour {
             texture.LoadImage(fileBytes);
         
         Debug.Log(filePath);
-        //bg.transform.localScale += new Vector3(Cam.rect.y, 0, Cam.rect.x);
-        //Graphics.Blit(texture, renderTexture);
-        //bg.GetComponent<MeshRenderer>().material.mainTexture = texture;
-        //Cam.targetTexture = renderTexture;
+
         return texture;
     }
 

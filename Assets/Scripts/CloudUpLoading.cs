@@ -67,7 +67,7 @@ public class CloudUploading : MonoBehaviour
         Texture2D tex = new Texture2D(texture.width, texture.height, TextureFormat.RGB24, false);
         tex.SetPixels(texture.GetPixels());
         tex.Apply();
-        byte[] image = tex.EncodeToPNG();
+        byte[] image = tex.EncodeToJPG(50);
 
         // metadataStr = "Data information"; 
         byte[] metadata = System.Text.ASCIIEncoding.ASCII.GetBytes(metadataStr);
@@ -117,8 +117,7 @@ public class CloudUploading : MonoBehaviour
         if (request.error != null)
         {
             Debug.Log("request error: " + request.error);
-        }
-        else
+        }else
         {
             Debug.Log("request success");
             Debug.Log("returned data" + request.text);
