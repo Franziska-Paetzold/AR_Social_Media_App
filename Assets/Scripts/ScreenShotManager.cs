@@ -65,7 +65,13 @@ public class ScreenshotManager : MonoBehaviour {
 
     public Texture2D GetScreenshotImage()
     {
-        string filePath = Application.persistentDataPath + "/" + lastScreenshotPath;
+        string filePath;
+#if UNITY_EDITOR
+        filePath = Application.dataPath + "/../" + lastScreenshotPath;
+#elif UNITY_ANDROID
+        filePath = Application.persistentDataPath + "/" + lastScreenshotPath;
+#endif
+        Debug.Log(filePath);
         Texture2D texture = null;
         byte[] fileBytes;
       
@@ -84,4 +90,3 @@ public class ScreenshotManager : MonoBehaviour {
 
 
 }
-

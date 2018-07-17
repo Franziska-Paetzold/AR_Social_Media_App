@@ -13,7 +13,7 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler
     private string mTargetMetadata = "";
     
     // Use this for initialization
-    void Start()
+    void Awake()
     {
         // register this event handler at the cloud reco behaviour
         mCloudRecoBehaviour = GetComponent<CloudRecoBehaviour>();
@@ -86,23 +86,6 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler
 
     }
 
-    void OnGUI()
-    {
-        // Display current 'scanning' status
-        //GUI.Box(new Rect(100, 100, 200, 50), mIsScanning ? "Scanning" : "Not scanning");
-        // Display metadata of latest detected cloud-target
-        GUI.Box(new Rect(100, 10, 150, 50), "Metadata: " + mTargetMetadata);
-        // If not scanning, show button
-        // so that user can restart cloud scanning
-        if (!mIsScanning)
-        {
-            if (GUI.Button(new Rect(100, 300, 200, 50), "Restart Scanning"))
-            {
-                // Restart TargetFinder
-                mCloudRecoBehaviour.CloudRecoEnabled = true;
-            }
-        }
-    }
 
 
 }

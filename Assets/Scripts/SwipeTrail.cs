@@ -111,6 +111,23 @@ public class SwipeTrail : MonoBehaviour
 
     }
 
+
+    public void RetraceLine(LineRenderer line, int lineNumber)
+    {
+
+        Line currentLine = lineManager.AllLines[lineNumber];
+
+        // Set the width of the Line Renderer
+        line.SetWidth(0.01f, 0.01f);
+        // Set the number of vertex fo the Line Renderer
+        line.positionCount = currentLine.Positions.Length;
+        line.material = TrailMaterial;
+        setTrailColour(Color, null, line);
+        line.SetPositions(currentLine.Positions);
+    }
+
+
+
     void StoreRay()
     {
         int arrayLength = TrailRenderer.positionCount;
@@ -136,19 +153,6 @@ public class SwipeTrail : MonoBehaviour
     }
 
 
-    public void RetraceLine(LineRenderer line, int lineNumber)
-    {
-
-        Line currentLine = lineManager.AllLines[lineNumber];
-
-        // Set the width of the Line Renderer
-        line.SetWidth(0.01f, 0.01f);
-        // Set the number of vertex fo the Line Renderer
-        line.positionCount = currentLine.Positions.Length;
-        line.material = TrailMaterial;
-        setTrailColour(Color, null, line);
-        line.SetPositions(currentLine.Positions);
-    }
 
     /// <summary>
     /// 
