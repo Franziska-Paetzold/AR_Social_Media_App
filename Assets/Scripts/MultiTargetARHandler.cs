@@ -15,7 +15,6 @@ using Vuforia;
 
 public class MultiTargetARHandler : MonoBehaviour, IUserDefinedTargetEventHandler
 {
-    public TargetStorer targetStorer = new TargetStorer();
 
     #region PUBLIC_MEMBERS
     /// <summary>
@@ -41,7 +40,7 @@ public class MultiTargetARHandler : MonoBehaviour, IUserDefinedTargetEventHandle
 
     // Relevant for storing
     // DataSet that newly defined targets are added to
-    DataSet m_UDT_DataSet;
+    public DataSet m_UDT_DataSet;
 
     // Currently observed frame quality
     ImageTargetBuilder.FrameQuality m_FrameQuality = ImageTargetBuilder.FrameQuality.FRAME_QUALITY_NONE;
@@ -104,6 +103,35 @@ public class MultiTargetARHandler : MonoBehaviour, IUserDefinedTargetEventHandle
         m_FrameQualityMeter.SetQuality(frameQuality);
     }
 
+
+
+
+    public void DestroyLastTrackable()
+    {
+        // Deactivates the dataset first
+        m_ObjectTracker.DeactivateDataSet(m_UDT_DataSet);
+
+        IEnumerable<Trackable> trackables = m_UDT_DataSet.GetTrackables();
+        Trackable newest = null;
+        foreach (Trackable trackable in trackables)
+        {
+            if (newest == null || trackable.ID > newest.ID)
+                newest = trackable;
+        }
+
+        if (newest != null)
+        {
+            Debug.Log("Destroying oldest trackable in UDT dataset: " + newest.Name);
+            m_UDT_DataSet.Destroy(newest, true);
+        }
+        // Activate the dataset again
+        m_ObjectTracker.ActivateDataSet(m_UDT_DataSet);
+        // Make sure TargetBuildingBehaviour keeps scanning...
+        m_TargetBuildingBehaviour.StartScanning();
+
+    }
+
+
     /// <summary>
     /// Takes a new trackable source and adds it to the dataset
     /// This gets called automatically as soon as you 'BuildNewTarget with UserDefinedTargetBuildingBehaviour
@@ -133,13 +161,11 @@ public class MultiTargetARHandler : MonoBehaviour, IUserDefinedTargetEventHandle
             }
         }
 
+
         // Get predefined trackable and instantiate it
         ImageTargetBehaviour imageTargetCopy = Instantiate(ImageTargetTemplate, transform.parent);
         imageTargetCopy.gameObject.name = "UserDefinedTarget-" + m_TargetCounter;
         //imageTargetCopy.transform.parent = transform.parent;
-
-        // L: Stores the new marker in a list
-        targetStorer.CustomMarkers.Add(imageTargetCopy.gameObject);
 
         // Add the duplicated trackable to the data set and activate it
         m_UDT_DataSet.CreateTrackable(trackableSource, imageTargetCopy.gameObject);

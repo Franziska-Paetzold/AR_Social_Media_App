@@ -123,6 +123,8 @@ public class MainAppManager : MonoBehaviour {
     {
         MainUIElements.SetActive(true);
         PostUIElements.SetActive(false);
+        ARHandler.DestroyLastTrackable();
+        Destroy(target);
     }
 
 }

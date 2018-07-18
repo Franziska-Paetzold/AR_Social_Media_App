@@ -1,23 +1,43 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class KeyBoardController : MonoBehaviour
 {
 
-    public string stringToEdit = "Hello World";
-    private TouchScreenKeyboard keyboard;
+    public string textPostContent = "";
+    private TouchScreenKeyboard manualKeyboard;
+    public Text textField;
+
 
 
     // Opens native keyboard
     void OnGUI()
     {
-        stringToEdit = GUI.TextField(new Rect(10, 10, 200, 30), stringToEdit, 30);
+        //GUIStyle kindOfPostButtonStyle = new GUIStyle("kindOfPostButtonStyle");
+        //kindOfPostButtonStyle.fontSize = 20;
+        //bool textPostButton = GUI.Button(new Rect(10, Screen.height - 200, 200, 200), "A", kindOfPostButtonStyle);
+        bool textPostButton = GUI.Button(new Rect(10, Screen.height - 500, 200, 200), "A");
 
-        if (GUI.Button(new Rect(10, 50, 200, 100), "Default"))
+
+        if (textPostButton)
         {
-            keyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
+            manualKeyboard = TouchScreenKeyboard.Open(textPostContent);
+            TouchScreenKeyboard.hideInput = true;
+            textField.text = textPostContent;
         }
+
+        if (manualKeyboard.active)
+        {
+            textField.text = textPostContent;
+        }
+
+        if (manualKeyboard != null)
+        {
+            textPostContent = manualKeyboard.text;
+        }
+
 
     }
 }
