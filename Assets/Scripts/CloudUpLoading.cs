@@ -67,7 +67,7 @@ public class CloudUploading : MonoBehaviour
         Texture2D tex = new Texture2D(texture.width, texture.height, TextureFormat.RGB24, false);
         tex.SetPixels(texture.GetPixels());
         tex.Apply();
-        byte[] image = tex.EncodeToJPG(50);
+        byte[] image = tex.EncodeToJPG(80);
 
         // metadataStr = "Data information"; 
         byte[] metadata = System.Text.ASCIIEncoding.ASCII.GetBytes(metadataStr);

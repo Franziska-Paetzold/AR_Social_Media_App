@@ -18,6 +18,9 @@ public class PostReconstructor : MonoBehaviour, ITrackableEventHandler {
 
     // Use this for initialization
     void Start () {
+        Screen.autorotateToPortrait = true;
+       
+
         mTrackableBehaviour = GetComponent<TrackableBehaviour>();
         if (mTrackableBehaviour)
             mTrackableBehaviour.RegisterTrackableEventHandler(this);
@@ -25,7 +28,8 @@ public class PostReconstructor : MonoBehaviour, ITrackableEventHandler {
 
     void Update()
     {
-        //transform.LookAt(Camera.main.transform);
+
+       //transform.RotateAround(Vector3.zero, Vector3.left, 90 * Time.deltaTime);
     }
 
 
@@ -48,8 +52,8 @@ public class PostReconstructor : MonoBehaviour, ITrackableEventHandler {
 
         newLine.name = "Line segment " + lineCounter;
         newLine.AddComponent<LineRenderer>();
-        newLine.transform.localPosition = new Vector3(0, 0, 0);
-        newLine.transform.localRotation = Quaternion.identity;
+        //newLine.transform.localPosition = new Vector3(0, 0, 0);
+        //newLine.transform.localRotation = Quaternion.identity;
         RetraceLine(newLine.GetComponent<LineRenderer>(), lineCounter);
 
     }

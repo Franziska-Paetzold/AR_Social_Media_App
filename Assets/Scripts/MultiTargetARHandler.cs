@@ -211,16 +211,16 @@ public class MultiTargetARHandler : MonoBehaviour, IUserDefinedTargetEventHandle
     #endregion //PRIVATE_METHODS
 
 
-    void OnGUI()
-    {
-        if(GUI.Button(new Rect(10, 10, 50, 30), "Test"))
-        {
-            IEnumerable<Trackable> trackables = m_UDT_DataSet.GetTrackables();
-            foreach (Trackable trackable in trackables)
-            {
-                Debug.Log(trackable.Name);
-            }
-        }
+    //void OnGUI()
+    //{
+    //    if(GUI.Button(new Rect(10, 10, 50, 30), "Test"))
+    //    {
+    //        IEnumerable<Trackable> trackables = m_UDT_DataSet.GetTrackables();
+    //        foreach (Trackable trackable in trackables)
+    //        {
+    //            Debug.Log(trackable.Name);
+    //        }
+    //    }
 
-    }
+    //}
 }
