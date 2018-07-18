@@ -25,9 +25,9 @@ public class CloudUploading : MonoBehaviour
     public string metadataStr;
 
     // Your Server Access Key
-    private string access_key = "e620edcd9e50d369339c21a83248d05738cc842b";
+    public string access_key = "e620edcd9e50d369339c21a83248d05738cc842b";
     // Your Server Secret Key
-    private string secret_key = "ef82996acfbc92cdbc4d9a753ba90d422216aa92";
+    public string secret_key = "ef82996acfbc92cdbc4d9a753ba90d422216aa92";
     private string url = @"https://vws.vuforia.com";
     private string targetName = "MyTarget"; // must change when upload another Image Target, avoid same as exist Image on cloud
 

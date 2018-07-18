@@ -41,20 +41,23 @@ public class MainAppManager : MonoBehaviour {
     {
         
 
-        // Make a screenshot for the marker to upload
-        ScreenshotManager.TakeAShot();
+
 
 
 
         ARHandler = FindObjectOfType<MultiTargetARHandler>();
         string targetName = ARHandler.BuildNewTarget();
+        if (targetName == null) return;
+
+        // Make a screenshot for the marker to upload
+        ScreenshotManager.TakeAShot();
 
         StartCoroutine(FindTarget(targetName));
 
         this.draw = draw;
 
-        
-        
+
+
     }
 
     IEnumerator FindTarget(string targetName)
@@ -107,9 +110,19 @@ public class MainAppManager : MonoBehaviour {
             target.GetComponentInChildren<ColorPicker>().gameObject.SetActive(false);
             TargetUploader.metadataStr = target.GetComponentInChildren<SwipeTrail>().getJsonGraffiti();
         }
-
+        else if (!draw)
+        {
+            // TODO texting stuff
+        }
 
         TargetUploader.CallPostTarget();
+    }
+
+
+    public void PushCancelButton()
+    {
+        MainUIElements.SetActive(true);
+        PostUIElements.SetActive(false);
     }
 
 }
