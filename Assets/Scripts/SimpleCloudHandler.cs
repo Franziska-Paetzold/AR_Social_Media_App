@@ -75,11 +75,16 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler
         if (targetSearchResult.MetaData == null) return;
         // do something with the target metadata
         mTargetMetadata = targetSearchResult.MetaData;
-        Reconstructor.lineManager = JsonUtility.FromJson<LineManager>(mTargetMetadata);
-        // stop the target finder (i.e. stop scanning the cloud)
-        //mCloudRecoBehaviour.CloudRecoEnabled = false;
+        if (mTargetMetadata.Contains("Graffiti"))
+            Reconstructor.setLineManager(JsonUtility.FromJson<LineManager>(mTargetMetadata));
+        else if (mTargetMetadata.Contains("Text"))
+            Reconstructor.setTextManager(JsonUtility.FromJson<TextManager>(mTargetMetadata));
 
-        ImageTargetBehaviour imageTargetBehaviour = (ImageTargetBehaviour)tracker.TargetFinder.EnableTracking(
+
+            // stop the target finder (i.e. stop scanning the cloud)
+            //mCloudRecoBehaviour.CloudRecoEnabled = false;
+
+            ImageTargetBehaviour imageTargetBehaviour = (ImageTargetBehaviour)tracker.TargetFinder.EnableTracking(
              targetSearchResult, ImageTargetTemplate.gameObject);
 
         // Build augmentation based on target

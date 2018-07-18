@@ -1,20 +1,31 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Vuforia;
 
 public class PostReconstructor : MonoBehaviour, ITrackableEventHandler {
-    public LineManager lineManager = new LineManager();
+    private LineManager lineManager = null;
+    private TextManager textManager = null;
 
     private TrackableBehaviour mTrackableBehaviour;
     public SimpleCloudHandler CloudHandler;
     public Material TrailMaterial;
     public GameObject PostParent;
-    public GameObject CornerObject;
+    public Text text;
+    public GameObject textRetracer;
+    public GameObject panel;
 
-    private bool firstLine = true;
-    private LineRenderer lineFirst;
-    public bool readyCorner;
+ 
+    public void setLineManager(LineManager lm)
+    {
+        lineManager = lm;
+    }
+
+    public void setTextManager(TextManager tm)
+    {
+        textManager = tm;
+    }
 
     // Use this for initialization
     void Start () {
@@ -29,19 +40,32 @@ public class PostReconstructor : MonoBehaviour, ITrackableEventHandler {
     void Update()
     {
 
-       //transform.RotateAround(Vector3.zero, Vector3.left, 90 * Time.deltaTime);
     }
 
 
     void ShowDownloadedPost()
     {
-        for (int i = 0; i < lineManager.AllLines.Count; i++)
+        if (lineManager != null)
         {
-           CreateLineObject(i);
+            for (int i = 0; i < lineManager.AllLines.Count; i++)
+            {
+                CreateLineObject(i);
+            }
         }
-        //SetRightPosition();
+        else if(textManager != null)
+        {
+
+            textRetracer.SetActive(true);
+            text.text = textManager.Post;
+            float width = text.gameObject.GetComponent<RectTransform>().rect.width;
+            float height = text.gameObject.GetComponent<RectTransform>().rect.height;
+            panel.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
+        }
+
+
 
     }
+
 
 
     void CreateLineObject(int lineCounter)
@@ -82,13 +106,7 @@ public class PostReconstructor : MonoBehaviour, ITrackableEventHandler {
         lineRenderer.endColor = new Color(r, g, b);
     }
 
-    void SetRightPosition()
-    {
-        CornerObject.transform.localPosition = lineFirst.GetPosition(0);
-        PostParent.transform.parent = CornerObject.transform;
-        //CornerObject.transform.localPosition = new Vector3(0, 0, 0);
-        readyCorner = true;
-    }
+
 
 
     /// <summary>
@@ -124,21 +142,21 @@ public class PostReconstructor : MonoBehaviour, ITrackableEventHandler {
 
     private void OnTrackingFound()
     {
-        var rendererComponents = GetComponentsInChildren<Renderer>(true);
-        var colliderComponents = GetComponentsInChildren<Collider>(true);
-        var canvasComponents = GetComponentsInChildren<Canvas>(true);
+        //var rendererComponents = GetComponentsInChildren<Renderer>(true);
+        //var colliderComponents = GetComponentsInChildren<Collider>(true);
+        //var canvasComponents = GetComponentsInChildren<Canvas>(true);
 
-        // Enable rendering:
-        foreach (var component in rendererComponents)
-            component.enabled = true;
+        //// Enable rendering:
+        //foreach (var component in rendererComponents)
+        //    component.enabled = true;
 
-        // Enable colliders:
-        foreach (var component in colliderComponents)
-            component.enabled = true;
+        //// Enable colliders:
+        //foreach (var component in colliderComponents)
+        //    component.enabled = true;
 
-        // Enable canvas':
-        foreach (var component in canvasComponents)
-            component.enabled = true;
+        //// Enable canvas':
+        //foreach (var component in canvasComponents)
+        //    component.enabled = true;
 
         ShowDownloadedPost();
     }
@@ -149,31 +167,31 @@ public class PostReconstructor : MonoBehaviour, ITrackableEventHandler {
         // Activate the cloud scanning again
         CloudHandler.mCloudRecoBehaviour.CloudRecoEnabled = true;
 
-        var rendererComponents = GetComponentsInChildren<Renderer>(true);
-        var colliderComponents = GetComponentsInChildren<Collider>(true);
-        var canvasComponents = GetComponentsInChildren<Canvas>(true);
+        //var rendererComponents = GetComponentsInChildren<Renderer>(true);
+        //var colliderComponents = GetComponentsInChildren<Collider>(true);
+        //var canvasComponents = GetComponentsInChildren<Canvas>(true);
 
-        // Disable rendering:
-        foreach (var component in rendererComponents)
-            component.enabled = false;
+        //// Disable rendering:
+        //foreach (var component in rendererComponents)
+        //    component.enabled = false;
 
-        // Disable colliders:
-        foreach (var component in colliderComponents)
-            component.enabled = false;
+        //// Disable colliders:
+        //foreach (var component in colliderComponents)
+        //    component.enabled = false;
 
-        // Disable canvas':
-        foreach (var component in canvasComponents)
-            component.enabled = false;
+        //// Disable canvas':
+        //foreach (var component in canvasComponents)
+        //    component.enabled = false;
 
         foreach (Transform child in PostParent.transform)
         {
             GameObject.Destroy(child.gameObject);
         }
-        //PostParent.transform.parent = Camera.main.transform;
-        
-        //PostParent.transform.localPosition = new Vector3(0,0,0);
-       
-        // firstLine = true;
+        lineManager = null;
+        textManager = null;
+
+
+        textRetracer.SetActive(false);
     }
 
 

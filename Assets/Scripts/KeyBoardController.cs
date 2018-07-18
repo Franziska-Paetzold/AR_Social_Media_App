@@ -9,16 +9,25 @@ public class KeyBoardController : MonoBehaviour
     public string textPostContent = "";
     private TouchScreenKeyboard manualKeyboard;
     public Text textField;
+    public bool textPostButton;
+    public GameObject Panel;
+    public TextManager textManager = new TextManager();
 
-
+    public string getJsonGraffiti()
+    {
+        string jsonObject = JsonUtility.ToJson(textManager);
+        return jsonObject;
+    }
+    private void Update()
+    {
+        float width = textField.gameObject.GetComponent<RectTransform>().rect.width;
+        float height = textField.gameObject.GetComponent<RectTransform>().rect.height;
+        Panel.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
+    }
 
     // Opens native keyboard
     void OnGUI()
     {
-        //GUIStyle kindOfPostButtonStyle = new GUIStyle("kindOfPostButtonStyle");
-        //kindOfPostButtonStyle.fontSize = 20;
-        //bool textPostButton = GUI.Button(new Rect(10, Screen.height - 200, 200, 200), "A", kindOfPostButtonStyle);
-        bool textPostButton = GUI.Button(new Rect(10, Screen.height - 500, 200, 200), "A");
 
 
         if (textPostButton)
@@ -26,7 +35,7 @@ public class KeyBoardController : MonoBehaviour
             manualKeyboard = TouchScreenKeyboard.Open(textPostContent);
             TouchScreenKeyboard.hideInput = true;
             textField.text = textPostContent;
-        }
+
 
         if (manualKeyboard.active)
         {
@@ -38,6 +47,19 @@ public class KeyBoardController : MonoBehaviour
             textPostContent = manualKeyboard.text;
         }
 
+            if (manualKeyboard.done)
+            {
+                textPostButton = false;
+                textManager.Post = textField.text;
+            }
 
+        }
     }
+}
+
+[System.Serializable]
+public class TextManager
+{
+    public string PostType = "Text";
+    public string Post = "Dummy";
 }

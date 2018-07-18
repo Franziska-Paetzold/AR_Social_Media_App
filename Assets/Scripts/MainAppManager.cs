@@ -40,11 +40,6 @@ public class MainAppManager : MonoBehaviour {
     public void PushCreateButton(bool draw)
     {
         
-
-
-
-
-
         ARHandler = FindObjectOfType<MultiTargetARHandler>();
         string targetName = ARHandler.BuildNewTarget();
         if (targetName == null) return;
@@ -88,10 +83,12 @@ public class MainAppManager : MonoBehaviour {
             target.GetComponentInChildren(typeof(Drawer), true).gameObject.SetActive(true);
         }
         else if (!draw)
-            target.GetComponentInChildren(typeof(Texter), true).gameObject.SetActive(true);
+        {
+            GameObject textController = target.GetComponentInChildren(typeof(Texter), true).gameObject;
+            textController.SetActive(true);
+            textController.GetComponent<KeyBoardController>().textPostButton = true;
 
-
-        
+        }
         
     }
 
@@ -112,7 +109,7 @@ public class MainAppManager : MonoBehaviour {
         }
         else if (!draw)
         {
-            // TODO texting stuff
+            TargetUploader.metadataStr = target.GetComponentInChildren<KeyBoardController>().getJsonGraffiti();
         }
 
         TargetUploader.CallPostTarget();
