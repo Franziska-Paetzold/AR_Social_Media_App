@@ -10,6 +10,11 @@ public class PostReconstructor : MonoBehaviour, ITrackableEventHandler {
     public SimpleCloudHandler CloudHandler;
     public Material TrailMaterial;
     public GameObject PostParent;
+    public GameObject CornerObject;
+
+    private bool firstLine = true;
+    private LineRenderer lineFirst;
+    public bool readyCorner;
 
     // Use this for initialization
     void Start () {
@@ -17,11 +22,11 @@ public class PostReconstructor : MonoBehaviour, ITrackableEventHandler {
         if (mTrackableBehaviour)
             mTrackableBehaviour.RegisterTrackableEventHandler(this);
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    void Update()
+    {
+        //transform.LookAt(Camera.main.transform);
+    }
 
 
     void ShowDownloadedPost()
@@ -30,15 +35,21 @@ public class PostReconstructor : MonoBehaviour, ITrackableEventHandler {
         {
            CreateLineObject(i);
         }
+        //SetRightPosition();
+
     }
 
 
     void CreateLineObject(int lineCounter)
     {
         GameObject newLine = new GameObject();
+       
         newLine.transform.parent = PostParent.transform;
+
         newLine.name = "Line segment " + lineCounter;
         newLine.AddComponent<LineRenderer>();
+        newLine.transform.localPosition = new Vector3(0, 0, 0);
+        newLine.transform.localRotation = Quaternion.identity;
         RetraceLine(newLine.GetComponent<LineRenderer>(), lineCounter);
 
     }
@@ -53,7 +64,7 @@ public class PostReconstructor : MonoBehaviour, ITrackableEventHandler {
         // Set the number of vertex fo the Line Renderer
         line.positionCount = currentLine.Positions.Length;
         line.material = TrailMaterial;
-        line.useWorldSpace = false;
+        //line.useWorldSpace = false;
         SetTrailColour(line, currentLine.colour);
         line.SetPositions(currentLine.Positions);
     }
@@ -65,6 +76,14 @@ public class PostReconstructor : MonoBehaviour, ITrackableEventHandler {
         float b = colour.z;
         lineRenderer.startColor = new Color(r, g, b);
         lineRenderer.endColor = new Color(r, g, b);
+    }
+
+    void SetRightPosition()
+    {
+        CornerObject.transform.localPosition = lineFirst.GetPosition(0);
+        PostParent.transform.parent = CornerObject.transform;
+        //CornerObject.transform.localPosition = new Vector3(0, 0, 0);
+        readyCorner = true;
     }
 
 
@@ -146,7 +165,11 @@ public class PostReconstructor : MonoBehaviour, ITrackableEventHandler {
         {
             GameObject.Destroy(child.gameObject);
         }
-
+        //PostParent.transform.parent = Camera.main.transform;
+        
+        //PostParent.transform.localPosition = new Vector3(0,0,0);
+       
+        // firstLine = true;
     }
 
 

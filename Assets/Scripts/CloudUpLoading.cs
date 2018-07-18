@@ -73,7 +73,7 @@ public class CloudUploading : MonoBehaviour
         byte[] metadata = System.Text.ASCIIEncoding.ASCII.GetBytes(metadataStr);
         PostNewTrackableRequest model = new PostNewTrackableRequest();
         model.name = targetName;
-        model.width = 64.5f; // don't need same as width of texture
+        model.width = 0.5f; // don't need same as width of texture
         model.image = System.Convert.ToBase64String(image);
 
         model.application_metadata = System.Convert.ToBase64String(metadata);

@@ -71,7 +71,7 @@ public class ScreenshotManager : MonoBehaviour {
 #elif UNITY_ANDROID
         filePath = Application.persistentDataPath + "/" + lastScreenshotPath;
 #endif
-        Debug.Log(filePath);
+    
         Texture2D texture = null;
         byte[] fileBytes;
       

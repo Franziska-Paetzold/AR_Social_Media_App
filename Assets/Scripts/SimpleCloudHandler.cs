@@ -11,10 +11,11 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler
     public CloudRecoBehaviour mCloudRecoBehaviour;
     private bool mIsScanning = false;
     private string mTargetMetadata = "";
-    
+   
     // Use this for initialization
     void Awake()
     {
+        
         // register this event handler at the cloud reco behaviour
         mCloudRecoBehaviour = GetComponent<CloudRecoBehaviour>();
 
@@ -26,13 +27,19 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler
 
     void Update()
     {
-        if (ImageTargetTemplate)
-        {
-            
-            //ObjectToAugment.transform.localPosition = Vector3.Lerp(ObjectToAugment.transform.localPosition, new Vector3(0, 0, 0), Time.deltaTime * 5.0f);
-            //ObjectToAugment.transform.localRotation = Quaternion.Slerp(ObjectToAugment.transform.localRotation, Quaternion.identity, Time.deltaTime * 5.0f);
 
-        }
+        //if(Reconstructor.readyCorner)
+        //ObjectToAugment.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 2;
+        
+        //foreach(Transform child in ObjectToAugment.transform)
+        //{
+        //    child.localPosition = new Vector3(0, 0, 0);
+        //}
+
+        //ObjectToAugment.transform.localPosition = Vector3.Lerp(ObjectToAugment.transform.localPosition, new Vector3(0, 0, 0), Time.deltaTime * 5.0f);
+        //ObjectToAugment.transform.localRotation = Quaternion.Slerp(ObjectToAugment.transform.localRotation, Quaternion.identity, Time.deltaTime * 5.0f);
+
+
     }
 
     public void OnInitialized()
@@ -64,6 +71,7 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler
     // Here we handle a cloud target recognition event
     public void OnNewSearchResult(TargetFinder.TargetSearchResult targetSearchResult)
     {
+
         if (targetSearchResult.MetaData == null) return;
         // do something with the target metadata
         mTargetMetadata = targetSearchResult.MetaData;
@@ -80,7 +88,7 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler
             mCloudRecoBehaviour.CloudRecoEnabled = false;
             // enable the new result with the same ImageTargetBehaviour:
 
-            //ObjectToAugment.transform.position = CameraOffset.transform.position;
+            
         }
 
 
