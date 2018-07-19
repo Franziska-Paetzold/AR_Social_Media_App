@@ -10,6 +10,7 @@ public class MainAppManager : MonoBehaviour {
     public ScreenshotManager ScreenshotManager;
     public GameObject MainUIElements;
     public GameObject PostUIElements;
+    public GameObject CancelUI;
     public CloudUploading TargetUploader;
 
     private bool draw;
@@ -118,10 +119,23 @@ public class MainAppManager : MonoBehaviour {
 
     public void PushCancelButton()
     {
-        MainUIElements.SetActive(true);
-        PostUIElements.SetActive(false);
-        ARHandler.DestroyLastTrackable();
-        Destroy(target);
+        CancelUI.SetActive(true);
+    }
+
+    public void PushKeepDiscardButton(bool keep)
+    {
+        if (keep)
+        {
+            CancelUI.SetActive(false);
+        }
+        else if(!keep)
+        {
+            CancelUI.SetActive(false);
+            MainUIElements.SetActive(true);
+            PostUIElements.SetActive(false);
+            ARHandler.DestroyLastTrackable();
+            Destroy(target);
+        }
     }
 
 }
