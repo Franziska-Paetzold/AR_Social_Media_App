@@ -59,9 +59,6 @@ public class MainAppManager : MonoBehaviour {
     IEnumerator FindTarget(string targetName)
     {
 
-        
-        target = GameObject.Find(targetName);
-
         while (target == null)
         {
             target = GameObject.Find(targetName);
@@ -87,6 +84,7 @@ public class MainAppManager : MonoBehaviour {
         {
             GameObject textController = target.GetComponentInChildren(typeof(Texter), true).gameObject;
             textController.SetActive(true);
+            // bool textPostButton allows to open the keyboard
             textController.GetComponent<KeyBoardController>().textPostButton = true;
 
         }
@@ -122,20 +120,18 @@ public class MainAppManager : MonoBehaviour {
         CancelUI.SetActive(true);
     }
 
-    public void PushKeepDiscardButton(bool keep)
+    public void PushKeepButton()
     {
-        if (keep)
-        {
             CancelUI.SetActive(false);
-        }
-        else if(!keep)
-        {
-            CancelUI.SetActive(false);
-            MainUIElements.SetActive(true);
-            PostUIElements.SetActive(false);
-            ARHandler.DestroyLastTrackable();
-            Destroy(target);
-        }
+    }
+
+    public void PushDiscardButton()
+    {
+        CancelUI.SetActive(false);
+        MainUIElements.SetActive(true);
+        PostUIElements.SetActive(false);
+        ARHandler.DestroyLastTrackable();
+        Destroy(target);
     }
 
 }
