@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -61,6 +62,16 @@ public class ScreenshotManager : MonoBehaviour {
         return texture;
     }
 
+    public void DeleteLastScreenshot()
+    {
+        string filePath;
+#if UNITY_EDITOR
+        filePath = Application.dataPath + "/../" + lastScreenshotPath;
+#elif UNITY_ANDROID
+        filePath = Application.persistentDataPath + "/" + lastScreenshotPath;
+#endif
+        FileUtil.DeleteFileOrDirectory(filePath);
+    }
 
 
 
