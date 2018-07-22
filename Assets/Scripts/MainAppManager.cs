@@ -96,7 +96,7 @@ public class MainAppManager : MonoBehaviour {
 
         Texture2D takenScreenshot = ScreenshotManager.GetScreenshotImage();
         TargetUploader.texture = takenScreenshot;
-        ScreenshotManager.DeleteLastScreenshot();
+  
 
         MainUIElements.SetActive(true);
         PostUIElements.SetActive(false);
@@ -114,6 +114,7 @@ public class MainAppManager : MonoBehaviour {
         }
 
         TargetUploader.CallPostTarget();
+        ScreenshotManager.DeleteLastScreenshot();
     }
 
 

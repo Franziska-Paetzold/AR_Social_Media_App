@@ -1,9 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ScreenshotManager : MonoBehaviour {
 
@@ -70,7 +68,7 @@ public class ScreenshotManager : MonoBehaviour {
 #elif UNITY_ANDROID
         filePath = Application.persistentDataPath + "/" + lastScreenshotPath;
 #endif
-        FileUtil.DeleteFileOrDirectory(filePath);
+        File.Delete(filePath);
     }
 
 
