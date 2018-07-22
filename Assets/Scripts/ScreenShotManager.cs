@@ -6,34 +6,14 @@ using UnityEngine.UI;
 
 public class ScreenshotManager : MonoBehaviour {
 
-    public Camera Cam;
     private MainUIElements mainUIElements;
     private string lastScreenshotPath;
-    public RenderTexture renderTexture;
-    public GameObject bg;
+
 
     private void Start() {
         mainUIElements = FindObjectOfType<MainUIElements>();
     }
 
-    // Update is called once per frame
-    void Update () {
-        if(Input.GetKeyDown(KeyCode.Space)){
-            TakeAShot();
-        }
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            GetScreenshotImage();
-        }
-
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            // choose the margin randomly
-            float margin = Random.Range(0.0f, 0.3f);
-            // setup the rectangle
-            Cam.rect = new Rect(margin, 0.0f, 1.0f - margin * 2.0f, 1.0f);
-        }
-    }
 
     public void TakeAShot()
     {
