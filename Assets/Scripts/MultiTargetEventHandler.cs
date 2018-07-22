@@ -17,6 +17,7 @@ using Vuforia;
 /// </summary>
 public class MultiTargetEventHandler : MonoBehaviour, ITrackableEventHandler
 {
+    public bool ObjectDetected;
 
     public GameObject CloudRecognition;
 
@@ -100,6 +101,8 @@ public class MultiTargetEventHandler : MonoBehaviour, ITrackableEventHandler
         // Enable canvas':
         foreach (var component in canvasComponents)
             component.enabled = true;
+
+        ObjectDetected = true;
     }
 
 
@@ -121,6 +124,9 @@ public class MultiTargetEventHandler : MonoBehaviour, ITrackableEventHandler
         // Disable canvas':
         foreach (var component in canvasComponents)
             component.enabled = false;
+
+
+        ObjectDetected = false;
     }
 
     #endregion // PROTECTED_METHODS

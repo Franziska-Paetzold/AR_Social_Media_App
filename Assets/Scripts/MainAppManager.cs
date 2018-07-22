@@ -12,6 +12,8 @@ public class MainAppManager : MonoBehaviour {
     public GameObject PostUIElements;
     public GameObject CancelUI;
     public CloudUploading TargetUploader;
+    public MultiTargetEventHandler MTEHabdler;
+    public PostReconstructor CloudHandler;
 
     private bool draw;
     private GameObject target = null;
@@ -36,18 +38,19 @@ public class MainAppManager : MonoBehaviour {
     /// <param name="draw">True when user wants to draw; false for a text post</param>
     public void PushCreateButton(bool draw)
     {
-        
-        ARHandler = FindObjectOfType<MultiTargetARHandler>();
-        string targetName = ARHandler.BuildNewTarget();
-        if (targetName == null) return;
+        if (!MTEHabdler.ObjectDetected && !CloudHandler.ObjectDetected)
+        {
+            ARHandler = FindObjectOfType<MultiTargetARHandler>();
+            string targetName = ARHandler.BuildNewTarget();
+            if (targetName == null) return;
 
-        // Make a screenshot for the marker to upload
-        ScreenshotManager.TakeAShot();
+            // Make a screenshot for the marker to upload
+            ScreenshotManager.TakeAShot();
 
-        StartCoroutine(FindTarget(targetName));
+            StartCoroutine(FindTarget(targetName));
 
-        this.draw = draw;
-
+            this.draw = draw;
+        }
 
 
     }
@@ -93,28 +96,29 @@ public class MainAppManager : MonoBehaviour {
 
     public void PushPostButton()
     {
+        
+            Texture2D takenScreenshot = ScreenshotManager.GetScreenshotImage();
+            TargetUploader.texture = takenScreenshot;
 
-        Texture2D takenScreenshot = ScreenshotManager.GetScreenshotImage();
-        TargetUploader.texture = takenScreenshot;
-  
 
-        MainUIElements.SetActive(true);
-        PostUIElements.SetActive(false);
+            MainUIElements.SetActive(true);
+            PostUIElements.SetActive(false);
 
-        if (draw)
-        {
-            // Deactivate SwipeTrail to stop user drawing on screen
-            target.GetComponentInChildren<SwipeTrail>().enabled = false;
-            target.GetComponentInChildren<ColorPicker>().gameObject.SetActive(false);
-            TargetUploader.metadataStr = target.GetComponentInChildren<SwipeTrail>().getJsonGraffiti();
-        }
-        else if (!draw)
-        {
-            TargetUploader.metadataStr = target.GetComponentInChildren<KeyBoardController>().getJsonGraffiti();
-        }
+            if (draw)
+            {
+                // Deactivate SwipeTrail to stop user drawing on screen
+                target.GetComponentInChildren<SwipeTrail>().enabled = false;
+                target.GetComponentInChildren<ColorPicker>().gameObject.SetActive(false);
+                TargetUploader.metadataStr = target.GetComponentInChildren<SwipeTrail>().getJsonGraffiti();
+            }
+            else if (!draw)
+            {
+                TargetUploader.metadataStr = target.GetComponentInChildren<KeyBoardController>().getJsonGraffiti();
+            }
 
-        TargetUploader.CallPostTarget();
-        ScreenshotManager.DeleteLastScreenshot();
+            TargetUploader.CallPostTarget();
+            ScreenshotManager.DeleteLastScreenshot();
+        
     }
 
 
@@ -135,6 +139,7 @@ public class MainAppManager : MonoBehaviour {
         PostUIElements.SetActive(false);
         ARHandler.DestroyLastTrackable();
         Destroy(target);
+        ScreenshotManager.DeleteLastScreenshot();
     }
 
 }
