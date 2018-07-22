@@ -28,11 +28,7 @@ public class MainAppManager : MonoBehaviour {
             Destroy(gameObject);
         }
 	}
-	
 
-	void Update () {
-		
-	}
 
     /// <summary>
     /// Is called when the user triggers a button to create a post
@@ -56,6 +52,11 @@ public class MainAppManager : MonoBehaviour {
 
     }
 
+    /// <summary>
+    /// Finds the GameObject of the new created target for further computing
+    /// </summary>
+    /// <param name="targetName">The name of the created object in the PushCreateButton method</param>
+    /// <returns></returns>
     IEnumerator FindTarget(string targetName)
     {
 
@@ -72,7 +73,6 @@ public class MainAppManager : MonoBehaviour {
     private void ProcessPostRequest()
     {
         
-
         MainUIElements.SetActive(false);
         PostUIElements.SetActive(true);
 
@@ -102,6 +102,7 @@ public class MainAppManager : MonoBehaviour {
 
         if (draw)
         {
+            // Deactivate SwipeTrail to stop user drawing on screen
             target.GetComponentInChildren<SwipeTrail>().enabled = false;
             target.GetComponentInChildren<ColorPicker>().gameObject.SetActive(false);
             TargetUploader.metadataStr = target.GetComponentInChildren<SwipeTrail>().getJsonGraffiti();

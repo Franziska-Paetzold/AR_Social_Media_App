@@ -1,14 +1,10 @@
 ﻿// Source: https://breakdownblogs.wordpress.com/2015/11/13/adding-image-target-to-cloud-database-use-api-vuforia-and-www-unity/
 
-using Pathfinding.Serialization.JsonFx;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Security.Cryptography;
 using UnityEngine;
-using UnityEngine.Networking;
 
 public class PostNewTrackableRequest
 {
@@ -20,36 +16,21 @@ public class PostNewTrackableRequest
 
 public class CloudUploading : MonoBehaviour
 {
-    public bool justDoIt;
     public Texture2D texture;
     public string metadataStr;
 
-    // Your Server Access Key
+    // Server Access Key
     public string access_key = "e620edcd9e50d369339c21a83248d05738cc842b";
-    // Your Server Secret Key
+    // Server Secret Key
     public string secret_key = "ef82996acfbc92cdbc4d9a753ba90d422216aa92";
     private string url = @"https://vws.vuforia.com";
-    private string targetName = "MyTarget"; // must change when upload another Image Target, avoid same as exist Image on cloud
-
+    private string targetName = "MyTarget";
     private byte[] requestBytesArray;
 
     public void CallPostTarget()
     {
         StartCoroutine(PostNewTarget());
     }
-
-    public void setJustDoIt(bool doIt)
-    {
-        justDoIt = doIt;
-    }
-
-    void Update()
-    {
-        if (justDoIt){
-            CallPostTarget();
-            justDoIt = false; }
-    }
-
 
 
     IEnumerator PostNewTarget()
@@ -61,24 +42,18 @@ public class CloudUploading : MonoBehaviour
         string contentType = "application/json";
         string date = string.Format("{0:r}", DateTime.Now.ToUniversalTime());
 
-        Debug.Log(date);
 
-        // if your texture2d has RGb24 type, don't need to redraw new texture2d
-        Texture2D tex = new Texture2D(texture.width, texture.height, TextureFormat.RGB24, false);
-        tex.SetPixels(texture.GetPixels());
-        tex.Apply();
-        byte[] image = tex.EncodeToJPG(80);
+        byte[] image = texture.EncodeToJPG(80);
 
         // metadataStr = "Data information"; 
         byte[] metadata = System.Text.ASCIIEncoding.ASCII.GetBytes(metadataStr);
         PostNewTrackableRequest model = new PostNewTrackableRequest();
         model.name = targetName;
-        model.width = 0.5f; // don't need same as width of texture
+        model.width = 0.5f; // the distance of the camera will be twice in Unity scale
         model.image = System.Convert.ToBase64String(image);
-
         model.application_metadata = System.Convert.ToBase64String(metadata);
-        string requestBody = JsonWriter.Serialize(model);
-        Debug.Log(requestBody);
+        string requestBody = JsonUtility.ToJson(model);
+
         WWWForm form = new WWWForm();
 
         var headers = form.headers;
@@ -89,7 +64,7 @@ public class CloudUploading : MonoBehaviour
 
 
         MD5 md5 = MD5.Create();
-        var contentMD5bytes = md5.ComputeHash(System.Text.Encoding.ASCII.GetBytes(requestBody));
+        byte[] contentMD5bytes = md5.ComputeHash(System.Text.Encoding.ASCII.GetBytes(requestBody));
         System.Text.StringBuilder sb = new System.Text.StringBuilder();
         for (int i = 0; i < contentMD5bytes.Length; i++)
         {
@@ -109,7 +84,7 @@ public class CloudUploading : MonoBehaviour
         headers["authorization"] = string.Format("VWS {0}:{1}", access_key, signature);
         Debug.Log(string.Format("VWS {0}:{1}", access_key, signature));
         Debug.Log("<color=green>Signature: " + signature + "</color>");
-        byte[] jsonPost = System.Text.Encoding.UTF8.GetBytes(JsonWriter.Serialize(model));
+        byte[] jsonPost = System.Text.Encoding.UTF8.GetBytes(requestBody);
         
         WWW request = new WWW(serviceURI, jsonPost, headers);
         yield return request;

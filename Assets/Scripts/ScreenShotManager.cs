@@ -6,12 +6,12 @@ using UnityEngine.UI;
 
 public class ScreenshotManager : MonoBehaviour {
 
-    private MainUIElements mainUIElements;
+    private GameObject mainUIElements;
     private string lastScreenshotPath;
 
 
     private void Start() {
-        mainUIElements = FindObjectOfType<MainUIElements>();
+        mainUIElements = MainAppManager.mainAppManager.MainUIElements;
     }
 
 
@@ -29,7 +29,6 @@ public class ScreenshotManager : MonoBehaviour {
         ScreenCapture.CaptureScreenshot(lastScreenshotPath);
         yield return new WaitForEndOfFrame();
         HideUI(false);
-
     }
 
     /// <summary>
@@ -38,7 +37,7 @@ public class ScreenshotManager : MonoBehaviour {
     /// <param name="on">True when the UI should be hidden; false to show it again</param>
     private void HideUI(bool hide)
     {
-        mainUIElements.gameObject.SetActive(!hide);
+        mainUIElements.SetActive(!hide);
     }
 
 
@@ -55,11 +54,9 @@ public class ScreenshotManager : MonoBehaviour {
         Texture2D texture = null;
         byte[] fileBytes;
       
-            fileBytes = File.ReadAllBytes(filePath);
-            texture = new Texture2D(2, 2, TextureFormat.RGB24, false);
-            texture.LoadImage(fileBytes);
-        
-        Debug.Log(filePath);
+        fileBytes = File.ReadAllBytes(filePath);
+        texture = new Texture2D(2, 2, TextureFormat.RGB24, false);
+        texture.LoadImage(fileBytes);
 
         return texture;
     }
