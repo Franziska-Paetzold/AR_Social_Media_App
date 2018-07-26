@@ -17,7 +17,7 @@ using Vuforia;
 /// </summary>
 public class MultiTargetEventHandler : MonoBehaviour, ITrackableEventHandler
 {
-    public bool ObjectDetected;
+    public static bool ObjectDetected;
 
     public GameObject CloudRecognition;
 

@@ -16,8 +16,8 @@ public class PostReconstructor : MonoBehaviour, ITrackableEventHandler {
     public GameObject textRetracer;
     public GameObject panel;
 
-    public bool ObjectDetected;
- 
+    public static bool ObjectDetected;
+
     public void setLineManager(LineManager lm)
     {
         lineManager = lm;

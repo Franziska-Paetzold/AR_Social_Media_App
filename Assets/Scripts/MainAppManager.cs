@@ -12,8 +12,7 @@ public class MainAppManager : MonoBehaviour {
     public GameObject PostUIElements;
     public GameObject CancelUI;
     public CloudUploading TargetUploader;
-    public MultiTargetEventHandler MTEHabdler;
-    public PostReconstructor CloudHandler;
+
 
     private bool draw;
     private GameObject target = null;
@@ -38,7 +37,7 @@ public class MainAppManager : MonoBehaviour {
     /// <param name="draw">True when user wants to draw; false for a text post</param>
     public void PushCreateButton(bool draw)
     {
-        if (!MTEHabdler.ObjectDetected && !CloudHandler.ObjectDetected)
+        if (!MultiTargetEventHandler.ObjectDetected && !PostReconstructor.ObjectDetected)
         {
             string targetName = ARHandler.BuildNewTarget();
             if (targetName == null) return;
@@ -117,7 +116,8 @@ public class MainAppManager : MonoBehaviour {
 
             TargetUploader.CallPostTarget();
             ScreenshotManager.DeleteLastScreenshot();
-        
+            target = null;
+
     }
 
 
@@ -138,6 +138,7 @@ public class MainAppManager : MonoBehaviour {
         PostUIElements.SetActive(false);
         ARHandler.DestroyLastTrackable();
         Destroy(target);
+        target = null;
         ScreenshotManager.DeleteLastScreenshot();
     }
 

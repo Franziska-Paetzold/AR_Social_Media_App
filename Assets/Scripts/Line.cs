@@ -23,8 +23,6 @@ public class Line {
         Positions = positions;
         PositionsForDatabase = MyVector3Extension.toVector2(positions);
         SerializePositions();
-        //jsonObject = JsonUtility.ToJson(this);
-        Debug.Log(Colour);
         colour.x = Colour.r;
         colour.y = Colour.g;
         colour.z = Colour.b;

@@ -91,7 +91,6 @@ public class SwipeTrail : MonoBehaviour
         // Check, if the user has released the screen to store the last drawn line
         if (!fingerOnScreen && TouchedAlready)
         {
-            Debug.Log("Lifted");
             StoreRay();
             CreateLineObject();
         }
