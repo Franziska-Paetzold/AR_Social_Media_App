@@ -10,7 +10,6 @@ public class SwipeTrail : MonoBehaviour
 {
     public LineManager lineManager = new LineManager();
     public string jsonObject;
-    //public List<Line> AllLines = new List<Line>();
     public int LineCounter = -1;
 
     public Material TrailMaterial;
@@ -25,9 +24,10 @@ public class SwipeTrail : MonoBehaviour
     public Image pickerLine;
     public GameObject pickerHue;
 
+    //! The start colour
     private Color Color = Color.red;
 
-    // Use this for initialization
+
     void Awake()
     {
 
@@ -99,7 +99,8 @@ public class SwipeTrail : MonoBehaviour
 
     }
 
-    void CreateLineObject()
+    //! The created object is used for retracing the line
+    private void CreateLineObject()
     {
         GameObject newLine = new GameObject();
         newLine.transform.parent = transform;
@@ -111,11 +112,9 @@ public class SwipeTrail : MonoBehaviour
     }
 
 
-    public void RetraceLine(LineRenderer line, int lineNumber)
+    private void RetraceLine(LineRenderer line, int lineNumber)
     {
-
         Line currentLine = lineManager.AllLines[lineNumber];
-
         // Set the width of the Line Renderer
         line.SetWidth(0.01f, 0.01f);
         // Set the number of vertex fo the Line Renderer
@@ -127,7 +126,7 @@ public class SwipeTrail : MonoBehaviour
 
 
 
-    void StoreRay()
+    private void StoreRay()
     {
         int arrayLength = TrailRenderer.positionCount;
         Color currentColour = TrailRenderer.endColor;
@@ -141,8 +140,6 @@ public class SwipeTrail : MonoBehaviour
         TrailRenderer.Clear();
         FirstTouch = true;
         TrailRenderer.enabled = false;
-
-        
     }
 
     public string getJsonGraffiti()
@@ -154,7 +151,7 @@ public class SwipeTrail : MonoBehaviour
 
 
     /// <summary>
-    /// 
+    /// Changes the Colour of the passed Renderer component
     /// </summary>
     /// <param name="color"></param>
     /// <param name="tRenderer">Optional. Changes the colour of the passed trail renderer</param>

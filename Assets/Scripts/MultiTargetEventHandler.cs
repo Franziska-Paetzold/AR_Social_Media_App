@@ -17,8 +17,12 @@ using Vuforia;
 /// </summary>
 public class MultiTargetEventHandler : MonoBehaviour, ITrackableEventHandler
 {
+    /** To determine if a marker is seen
+    Used to avoid creating markers on existent ones */
     public static bool ObjectDetected;
 
+    /** 
+    When a local target is found the object responsible for the cloud markers will be deactivated */ 
     public GameObject CloudRecognition;
 
     #region PROTECTED_MEMBER_VARIABLES
@@ -31,7 +35,6 @@ public class MultiTargetEventHandler : MonoBehaviour, ITrackableEventHandler
 
     protected virtual void Start()
     {
-
         mTrackableBehaviour = GetComponent<TrackableBehaviour>();
         if (mTrackableBehaviour)
             mTrackableBehaviour.RegisterTrackableEventHandler(this);

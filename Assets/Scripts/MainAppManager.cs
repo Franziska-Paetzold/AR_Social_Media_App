@@ -13,11 +13,12 @@ public class MainAppManager : MonoBehaviour {
     public GameObject CancelUI;
     public CloudUploading TargetUploader;
 
-
+    //! Describes, if the user is drawing or writing
     private bool draw;
+
     private GameObject target = null;
 
-
+    //! Makes sure that there is only one instance of the static class object
     private void Awake () {
 		if(mainAppManager == null)
         {
@@ -94,10 +95,8 @@ public class MainAppManager : MonoBehaviour {
 
     public void PushPostButton()
     {
-        
             Texture2D takenScreenshot = ScreenshotManager.GetScreenshotImage();
             TargetUploader.texture = takenScreenshot;
-
 
             MainUIElements.SetActive(true);
             PostUIElements.SetActive(false);
@@ -112,7 +111,8 @@ public class MainAppManager : MonoBehaviour {
             else if (!draw)
             {
                 TargetUploader.metadataStr = target.GetComponentInChildren<KeyBoardController>().getJsonGraffiti();
-            }
+                target.GetComponentInChildren<KeyBoardController>().enabled = false;
+        }
 
             TargetUploader.CallPostTarget();
             ScreenshotManager.DeleteLastScreenshot();
