@@ -33,7 +33,7 @@ public class CloudUploading : MonoBehaviour
     }
 
 
-    IEnumerator PostNewTarget()
+    private IEnumerator PostNewTarget()
     {
         targetName += UnityEngine.Random.Range(1, 1000);
         string requestPath = "/targets";
@@ -42,10 +42,8 @@ public class CloudUploading : MonoBehaviour
         string contentType = "application/json";
         string date = string.Format("{0:r}", DateTime.Now.ToUniversalTime());
 
-
         byte[] image = texture.EncodeToJPG(80);
 
-        // metadataStr = "Data information"; 
         byte[] metadata = System.Text.ASCIIEncoding.ASCII.GetBytes(metadataStr);
         PostNewTrackableRequest model = new PostNewTrackableRequest();
         model.name = targetName;
@@ -61,7 +59,6 @@ public class CloudUploading : MonoBehaviour
         headers["host"] = url;
         headers["date"] = date;
         headers["content-type"] = contentType;
-
 
         MD5 md5 = MD5.Create();
         byte[] contentMD5bytes = md5.ComputeHash(System.Text.Encoding.ASCII.GetBytes(requestBody));

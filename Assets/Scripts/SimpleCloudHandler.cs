@@ -25,22 +25,6 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler
         }
     }
 
-    void Update()
-    {
-
-        //if(Reconstructor.readyCorner)
-        //ObjectToAugment.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 2;
-        
-        //foreach(Transform child in ObjectToAugment.transform)
-        //{
-        //    child.localPosition = new Vector3(0, 0, 0);
-        //}
-
-        //ObjectToAugment.transform.localPosition = Vector3.Lerp(ObjectToAugment.transform.localPosition, new Vector3(0, 0, 0), Time.deltaTime * 5.0f);
-        //ObjectToAugment.transform.localRotation = Quaternion.Slerp(ObjectToAugment.transform.localRotation, Quaternion.identity, Time.deltaTime * 5.0f);
-
-
-    }
 
     public void OnInitialized()
     {

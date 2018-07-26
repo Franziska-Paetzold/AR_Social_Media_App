@@ -51,6 +51,7 @@ public class KeyBoardController : MonoBehaviour
             {
                 textPostButton = false;
                 textManager.Post = textField.text;
+                textPostContent = "";
             }
 
         }

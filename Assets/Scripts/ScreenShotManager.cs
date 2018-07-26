@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -7,6 +8,7 @@ public class ScreenshotManager : MonoBehaviour {
 
     private GameObject mainUIElements;
     private string lastScreenshotPath;
+    private string filePath;
 
 
     private void Start() {
@@ -20,7 +22,7 @@ public class ScreenshotManager : MonoBehaviour {
         StartCoroutine(CaptureIt());
     }
 
-    IEnumerator CaptureIt()
+    private IEnumerator CaptureIt()
     {
         string timeStamp = System.DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss");
         string fileName = "Screenshot" + timeStamp + ".jpg";
@@ -28,6 +30,18 @@ public class ScreenshotManager : MonoBehaviour {
         ScreenCapture.CaptureScreenshot(lastScreenshotPath);
         yield return new WaitForEndOfFrame();
         HideUI(false);
+
+
+        SaveLastFilePath();
+    }
+
+    private void SaveLastFilePath()
+    {
+#if UNITY_EDITOR
+        filePath = Application.dataPath + "/../" + lastScreenshotPath;
+#elif UNITY_ANDROID || UNITY_IOS
+        filePath = Application.persistentDataPath + "/" + lastScreenshotPath;
+#endif
     }
 
     /// <summary>
@@ -43,13 +57,7 @@ public class ScreenshotManager : MonoBehaviour {
 
     public Texture2D GetScreenshotImage()
     {
-        string filePath;
-#if UNITY_EDITOR
-        filePath = Application.dataPath + "/../" + lastScreenshotPath;
-#elif UNITY_ANDROID
-        filePath = Application.persistentDataPath + "/" + lastScreenshotPath;
-#endif
-    
+
         Texture2D texture = null;
         byte[] fileBytes;
       
@@ -62,12 +70,6 @@ public class ScreenshotManager : MonoBehaviour {
 
     public void DeleteLastScreenshot()
     {
-        string filePath;
-#if UNITY_EDITOR
-        filePath = Application.dataPath + "/../" + lastScreenshotPath;
-#elif UNITY_ANDROID
-        filePath = Application.persistentDataPath + "/" + lastScreenshotPath;
-#endif
         File.Delete(filePath);
     }
 

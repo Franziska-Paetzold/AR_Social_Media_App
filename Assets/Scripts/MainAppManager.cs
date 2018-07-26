@@ -19,7 +19,7 @@ public class MainAppManager : MonoBehaviour {
     private GameObject target = null;
 
 
-    void Awake () {
+    private void Awake () {
 		if(mainAppManager == null)
         {
             mainAppManager = this;
@@ -40,11 +40,10 @@ public class MainAppManager : MonoBehaviour {
     {
         if (!MTEHabdler.ObjectDetected && !CloudHandler.ObjectDetected)
         {
-            ARHandler = FindObjectOfType<MultiTargetARHandler>();
             string targetName = ARHandler.BuildNewTarget();
             if (targetName == null) return;
 
-            // Make a screenshot for the marker to upload
+            //! Make a screenshot for the marker to upload
             ScreenshotManager.TakeAShot();
 
             StartCoroutine(FindTarget(targetName));
@@ -60,7 +59,7 @@ public class MainAppManager : MonoBehaviour {
     /// </summary>
     /// <param name="targetName">The name of the created object in the PushCreateButton method</param>
     /// <returns></returns>
-    IEnumerator FindTarget(string targetName)
+    private IEnumerator FindTarget(string targetName)
     {
 
         while (target == null)
@@ -75,7 +74,7 @@ public class MainAppManager : MonoBehaviour {
 
     private void ProcessPostRequest()
     {
-        
+        Debug.Log("ProcessPostRequest()");
         MainUIElements.SetActive(false);
         PostUIElements.SetActive(true);
 
@@ -87,7 +86,7 @@ public class MainAppManager : MonoBehaviour {
         {
             GameObject textController = target.GetComponentInChildren(typeof(Texter), true).gameObject;
             textController.SetActive(true);
-            // bool textPostButton allows to open the keyboard
+            //! bool textPostButton allows to open the keyboard
             textController.GetComponent<KeyBoardController>().textPostButton = true;
 
         }
@@ -106,7 +105,7 @@ public class MainAppManager : MonoBehaviour {
 
             if (draw)
             {
-                // Deactivate SwipeTrail to stop user drawing on screen
+                //! Deactivate SwipeTrail to stop user drawing on screen
                 target.GetComponentInChildren<SwipeTrail>().enabled = false;
                 target.GetComponentInChildren<ColorPicker>().gameObject.SetActive(false);
                 TargetUploader.metadataStr = target.GetComponentInChildren<SwipeTrail>().getJsonGraffiti();

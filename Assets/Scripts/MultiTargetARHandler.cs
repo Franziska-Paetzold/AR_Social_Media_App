@@ -121,8 +121,9 @@ public class MultiTargetARHandler : MonoBehaviour, IUserDefinedTargetEventHandle
 
         if (newest != null)
         {
-            Debug.Log("Destroying oldest trackable in UDT dataset: " + newest.Name);
+            Debug.Log("Destroying newest trackable in UDT dataset: " + newest.Name);
             m_UDT_DataSet.Destroy(newest, true);
+            Debug.Log("destroyed");
         }
         // Activate the dataset again
         m_ObjectTracker.ActivateDataSet(m_UDT_DataSet);
