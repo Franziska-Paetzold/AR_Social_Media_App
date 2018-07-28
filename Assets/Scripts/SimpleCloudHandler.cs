@@ -45,8 +45,7 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler
         mIsScanning = scanning;
         if (scanning)
         {
-            // clear all known trackables
-            
+            // clear all known trackables 
             tracker.TargetFinder.ClearTrackables(false);
         }
     }
@@ -57,27 +56,22 @@ public class SimpleCloudHandler : MonoBehaviour, ICloudRecoEventHandler
     {
 
         if (targetSearchResult.MetaData == null) return;
-        // do something with the target metadata
+ 
         mTargetMetadata = targetSearchResult.MetaData;
+
+
         if (mTargetMetadata.Contains("Graffiti"))
             Reconstructor.setLineManager(JsonUtility.FromJson<LineManager>(mTargetMetadata));
         else if (mTargetMetadata.Contains("Text"))
             Reconstructor.setTextManager(JsonUtility.FromJson<TextManager>(mTargetMetadata));
 
-
-            // stop the target finder (i.e. stop scanning the cloud)
-            //mCloudRecoBehaviour.CloudRecoEnabled = false;
-
             ImageTargetBehaviour imageTargetBehaviour = (ImageTargetBehaviour)tracker.TargetFinder.EnableTracking(
              targetSearchResult, ImageTargetTemplate.gameObject);
 
-        // Build augmentation based on target
+
         if (ImageTargetTemplate != null)
         {
             mCloudRecoBehaviour.CloudRecoEnabled = false;
-            // enable the new result with the same ImageTargetBehaviour:
-
-            
         }
 
 

@@ -28,21 +28,14 @@ public class PostReconstructor : MonoBehaviour, ITrackableEventHandler {
         textManager = tm;
     }
 
-    // Use this for initialization
+
     void Start () {
         Screen.autorotateToPortrait = true;
        
-
         mTrackableBehaviour = GetComponent<TrackableBehaviour>();
         if (mTrackableBehaviour)
             mTrackableBehaviour.RegisterTrackableEventHandler(this);
     }
-
-    void Update()
-    {
-
-    }
-
 
     void ShowDownloadedPost()
     {
@@ -55,9 +48,9 @@ public class PostReconstructor : MonoBehaviour, ITrackableEventHandler {
         }
         else if(textManager != null)
         {
-
             textRetracer.SetActive(true);
             text.text = textManager.Post;
+            // Sets the text background panel to its size
             float width = text.gameObject.GetComponent<RectTransform>().rect.width;
             float height = text.gameObject.GetComponent<RectTransform>().rect.height;
             panel.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
@@ -77,8 +70,7 @@ public class PostReconstructor : MonoBehaviour, ITrackableEventHandler {
 
         newLine.name = "Line segment " + lineCounter;
         newLine.AddComponent<LineRenderer>();
-        //newLine.transform.localPosition = new Vector3(0, 0, 0);
-        //newLine.transform.localRotation = Quaternion.identity;
+
         RetraceLine(newLine.GetComponent<LineRenderer>(), lineCounter);
 
     }
@@ -150,7 +142,7 @@ public class PostReconstructor : MonoBehaviour, ITrackableEventHandler {
 
     private void OnTrackingLost()
     {
-        // Activate the cloud scanning again
+        // Activates the cloud scanning again
         CloudHandler.mCloudRecoBehaviour.CloudRecoEnabled = true;
 
         foreach (Transform child in PostParent.transform)

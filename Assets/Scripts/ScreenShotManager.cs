@@ -31,7 +31,6 @@ public class ScreenshotManager : MonoBehaviour {
         yield return new WaitForEndOfFrame();
         HideUI(false);
 
-
         SaveLastFilePath();
     }
 
